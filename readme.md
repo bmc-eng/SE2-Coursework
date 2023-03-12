@@ -39,6 +39,11 @@ Switched to branch 'main'
 git merge <sprintname>
 ```
 
+Push the code back up to the main github repository:
+
+``` git push https://github.com/LOdweebles/SE2-Coursework.git main ```
+
+
 ## How to compile and run
 Navigate to your favourite Terminal/ command line utility to the NewBank folder from the clone request. Run the following code:
 
