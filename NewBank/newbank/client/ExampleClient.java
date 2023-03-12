@@ -25,15 +25,26 @@ public class ExampleClient extends Thread{
 				try {
 					while(true) {
 						String responce = bankServerIn.readLine();
-						System.out.println(responce);
+						// Code to prevent a null error if the user isn't logged in
+						if (responce == null){
+							// Terminate the loop - need to use System.exit in order to 
+							// kill all open threads for the client.
+							System.exit(0);
+						} else {
+							System.out.println(responce);
+						}
+
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					return;
 				}
+				
+
 			}
 		};
 		bankServerResponceThread.start();
+		
 	}
 	
 	

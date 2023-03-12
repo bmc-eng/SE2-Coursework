@@ -18,6 +18,13 @@ Contributions are always welcome!
 | 5 | Sam | Bradley | Ali, Luke, Ray, Ben |
 | 6 | Ray | Ali | Luke, Ben, Sam, Bradley|
 
+## Getting started with git
+
+To clone the main branch of the project run the following code:
+
+``` git clone https://github.com/LOdweebles/SE2-Coursework.git ```
+
+Each week, the ScrumMaster should create a new branch of the main project for the weeks sprint.
 
 ## How to compile and run
 Navigate to your favourite Terminal/ command line utility to the NewBank folder from the clone request. Run the following code:
