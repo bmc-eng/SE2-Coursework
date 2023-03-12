@@ -18,11 +18,27 @@ public class NewBankClientHandler extends Thread{
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
 	}
+
+	public void welcomeMenu(){
+		// 
+		out.println("Welcome to NewBank!");
+		out.println("1. Login");
+		out.println("2. Create account");
+		out.println("Enter option (number)");
+		try{
+			String response = in.readLine();
+			if (response == "1"){
+				login();
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		
+	}
 	
-	public void run() {
-		// keep getting requests from the client and processing them
-		try {
-			// ask for user name
+	public void login(){
+		try{
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// ask for password
@@ -44,10 +60,18 @@ public class NewBankClientHandler extends Thread{
 			else {
 				out.println("Log In Failed");
 			}
-		} catch (IOException e) {
+		}
+		catch(IOException e){
 			e.printStackTrace();
 		}
-		finally {
+		
+	}
+
+	public void run() {
+		// keep getting requests from the client and processing them
+			welcomeMenu();
+			// ask for user name
+			
 			try {
 				in.close();
 				out.close();
@@ -55,7 +79,6 @@ public class NewBankClientHandler extends Thread{
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}
-		}
 	}
 
 }
