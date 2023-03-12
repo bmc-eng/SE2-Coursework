@@ -27,7 +27,8 @@ To clone the main branch of the project run the following code:
 Each week, the ScrumMaster should create a new branch of the main project for the weeks sprint. To do this run the following command:
 
 ``` git branch <sprintname>
-git checkout <sprintname>```
+git checkout <sprintname>
+```
 
 This will create a new branch. To merge this back into the main branch, run the following:
 
