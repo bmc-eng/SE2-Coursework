@@ -52,4 +52,8 @@ public class NewBank {
 		return (customers.get(customer.getKey())).accountsToString();
 	}
 
+	public void addNewCustomer(Customer newCustomer, String key){
+		customers.put(key, newCustomer);
+	}
+
 }

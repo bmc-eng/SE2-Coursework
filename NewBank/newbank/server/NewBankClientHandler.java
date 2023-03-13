@@ -30,6 +30,9 @@ public class NewBankClientHandler extends Thread{
 			if (response == "1"){
 				login();
 			}
+			if (response == "2"){
+				createAccount();
+			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -65,6 +68,29 @@ public class NewBankClientHandler extends Thread{
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void createAccount() throws IOException{
+		try{
+			out.println("name: ");
+			String key = in.readLine();
+			out.println("email: ");
+			String email = in.readLine();
+			out.println("address: ");
+			String address = in.readLine(); //TODO we should probably make addresses their own class so that they can be printed neatly
+			out.println("phone number: ");
+			String phone = in.readLine();
+			Customer newCustomer = new Customer(email, address, phone);
+			bank.addNewCustomer(newCustomer, key); //TODO This uses the name for the key; this should probably be changed to something else and the name added to the customer class
+			// need to add some way of adding the new customer to the hashmap in the bank object.
+		}
+		catch(IOException e){
+			System.out.println("Account creation failed; please try again");
+			createAccount();
+		}
+		finally{
+			System.out.println("Creation Successful");
+		}
 	}
 
 	public void run() {
