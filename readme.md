@@ -66,7 +66,7 @@ This will execute the client that will connect to the local host of the running 
 
 To stop all processes, use CTRL+C in the Terminal window running the server process.
 
-## Roadmap/ Tasks for this weeks sprint
+## Roadmap: Tasks for this weeks sprint
 
 - Documentation and commenting of code
 
