@@ -27,17 +27,18 @@ public class NewBankClientHandler extends Thread{
 		out.println("Enter option (number)");
 		try{
 			String response = in.readLine();
-			if (response == "1"){
+			if (response.contains("1")){
 				login();
 			}
-			if (response == "2"){
+			if (response.contains("2")){
 				createAccount();
 			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
-		
+		// Recursively remain on this menu until either 1 or 2 is selected
+		welcomeMenu();
 	}
 	
 	public void login(){
