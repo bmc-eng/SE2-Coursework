@@ -33,10 +33,6 @@ public class ExampleClient extends Thread{
 						} else {
 							System.out.println(responce);
 						}
-
-						if (responce != null){
-							System.out.println(responce);
-						}
 						
 					}
 				} catch (IOException e) {
