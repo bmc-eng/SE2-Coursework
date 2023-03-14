@@ -34,6 +34,10 @@ public class ExampleClient extends Thread{
 							System.out.println(responce);
 						}
 
+						if (responce != null){
+							System.out.println(responce);
+						}
+						
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

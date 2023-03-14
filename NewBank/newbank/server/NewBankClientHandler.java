@@ -18,11 +18,31 @@ public class NewBankClientHandler extends Thread{
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
 	}
+
+	public void welcomeMenu(){
+		// 
+		out.println("Welcome to NewBank!");
+		out.println("1. Login");
+		out.println("2. Create account");
+		out.println("Enter option (number)");
+		try{
+			String response = in.readLine();
+			if (response.contains("1")){
+				login();
+			}
+			if (response.contains("2")){
+				createAccount();
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		// Recursively remain on this menu until either 1 or 2 is selected
+		welcomeMenu();
+	}
 	
-	public void run() {
-		// keep getting requests from the client and processing them
-		try {
-			// ask for user name
+	public void login(){
+		try{
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// ask for password
@@ -44,10 +64,41 @@ public class NewBankClientHandler extends Thread{
 			else {
 				out.println("Log In Failed");
 			}
-		} catch (IOException e) {
+		}
+		catch(IOException e){
 			e.printStackTrace();
 		}
-		finally {
+		
+	}
+
+	public void createAccount() throws IOException{
+		try{
+			out.println("name: ");
+			String key = in.readLine();
+			out.println("email: ");
+			String email = in.readLine();
+			out.println("address: ");
+			String address = in.readLine(); //TODO we should probably make addresses their own class so that they can be printed neatly
+			out.println("phone number: ");
+			String phone = in.readLine();
+			Customer newCustomer = new Customer(email, address, phone);
+			bank.addNewCustomer(newCustomer, key); //TODO This uses the name for the key; this should probably be changed to something else and the name added to the customer class
+			// need to add some way of adding the new customer to the hashmap in the bank object.
+		}
+		catch(IOException e){
+			System.out.println("Account creation failed; please try again");
+			createAccount();
+		}
+		finally{
+			System.out.println("Creation Successful");
+		}
+	}
+
+	public void run() {
+		// keep getting requests from the client and processing them
+			welcomeMenu();
+			// ask for user name
+			
 			try {
 				in.close();
 				out.close();
@@ -55,7 +106,6 @@ public class NewBankClientHandler extends Thread{
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}
-		}
 	}
 
 }
