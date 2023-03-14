@@ -72,4 +72,8 @@ To stop all processes, use CTRL+C in the Terminal window running the server proc
 
 - Running of test code for adding a new customer
 
+## Latest updates
+
+Added .gitignore to the project to remove class files
+
 
