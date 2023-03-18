@@ -8,12 +8,27 @@ public class Customer {
 	private String customerEmailAddress;
 	private String customerAddress;
 	private String customerPhoneNumber; 
+	private String firstName;
+	private String lastName;
+	private String userName;
+	private String password;
 	
 	public Customer(String email, String address, String phone) {
 		accounts = new ArrayList<>();
 		customerEmailAddress = email; 
 		customerAddress = address; 
 		customerPhoneNumber = phone; 
+	}
+
+	// Adding a specific constructor method for populating from Database
+	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
+		this.userName = userName;
+		this.password = password;
+		this.firstName =firstName;
+		this.lastName = lastName;
+		this.customerAddress = address;
+		this.customerEmailAddress = email;
+		// To do: add info on accounts
 	}
 
 	public Customer(){
