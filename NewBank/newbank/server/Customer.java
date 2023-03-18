@@ -47,6 +47,22 @@ public class Customer {
 		accounts.add(account);		
 	}
 
+	public String getUsername(){
+		return userName;
+	}
+
+	public String getPassword(){
+		return password;
+	}
+
+	public String getFirstName(){
+		return firstName;
+	}
+
+	public String getLastName(){
+		return lastName;
+	}
+
 	public String getEmail(){
 		return customerEmailAddress; 
 	}
