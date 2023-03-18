@@ -11,12 +11,14 @@ public class NewBankClientHandler extends Thread{
 	private NewBank bank;
 	private BufferedReader in;
 	private PrintWriter out;
+	private Database db;
 	
 	
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
+		db = new Database();
 	}
 
 	public void welcomeMenu(){
@@ -73,17 +75,24 @@ public class NewBankClientHandler extends Thread{
 
 	public void createAccount() throws IOException{
 		try{
-			out.println("name: ");
-			String key = in.readLine();
+			out.println("Username: ");
+			String userName = in.readLine();
+			out.println("Password: ");
+			String password = in.readLine();
+			// TO DO: Encrypt password before writing to database
+			out.println("First Name: ");
+			String firstName = in.readLine();
+			out.println("Last Name: ");
+			String lastName = in.readLine();
 			out.println("email: ");
 			String email = in.readLine();
 			out.println("address: ");
 			String address = in.readLine(); //TODO we should probably make addresses their own class so that they can be printed neatly
 			out.println("phone number: ");
 			String phone = in.readLine();
-			Customer newCustomer = new Customer(email, address, phone);
-			bank.addNewCustomer(newCustomer, key); //TODO This uses the name for the key; this should probably be changed to something else and the name added to the customer class
-			// need to add some way of adding the new customer to the hashmap in the bank object.
+			Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
+			// Write the customer data to the database
+			db.addCustomer(newCustomer);
 		}
 		catch(IOException e){
 			System.out.println("Account creation failed; please try again");

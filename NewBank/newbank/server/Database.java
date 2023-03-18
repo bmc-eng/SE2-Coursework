@@ -2,6 +2,7 @@ package newbank.server;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 public class Database {
     public final String filePath;
@@ -9,7 +10,7 @@ public class Database {
 
     // Constructor method -- assigns file path value    
     public Database(){
-    filePath = "./Database/db.csv";
+    filePath = "DatabaseFiles/db.csv";
     }
 
     /*
@@ -39,6 +40,29 @@ public class Database {
     }
     
     public void addCustomer(Customer c){
+        try{
+            FileWriter csvWriter = new FileWriter(this.filePath);
+            csvWriter.append(c.getUsername());
+            csvWriter.append(',');
+            csvWriter.append(c.getPassword());
+            csvWriter.append(',');
+            csvWriter.append(c.getFirstName());
+            csvWriter.append(',');
+            csvWriter.append(c.getLastName());
+            csvWriter.append(',');
+            csvWriter.append(c.getAddress());
+            csvWriter.append(',');
+            csvWriter.append(c.getEmail());
+            csvWriter.append(',');
+            csvWriter.append("/n");
+            csvWriter.flush();
+            csvWriter.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return;
+        
 
     }
 
