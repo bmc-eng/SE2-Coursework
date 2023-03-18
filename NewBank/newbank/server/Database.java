@@ -74,7 +74,7 @@ public class Database {
             String row;
             while ((row = csvBuffReader.readLine()) != null){
                 String[] data = row.split(",");
-                if (data[0]==userName){
+                if (data[0].contentEquals(userName)){
                     customer = new Customer(data[0], data[1], data[2], data[3], data[4], data[5]);
                     closeFile(this.csvReader);
                     return customer;

@@ -47,19 +47,30 @@ public class NewBankClientHandler extends Thread{
 		try{
 			out.println("Enter Username");
 			String userName = in.readLine();
+			// Check if the username is in the database
+			Customer customer = db.getCustomer(userName);
+			if (customer == null){
+				out.println("Username does not exist...");
+				welcomeMenu();
+			}
 			// ask for password
 			out.println("Enter Password");
 			String password = in.readLine();
 			out.println("Checking Details...");
+			if(!customer.getPassword().contentEquals(password)){
+				out.println("Password invalid");
+				welcomeMenu();
+			}
+			
 			// authenticate user and get customer ID token from bank for use in subsequent requests
-			CustomerID customer = bank.checkLogInDetails(userName, password);
+			CustomerID customerID = bank.checkLogInDetails(userName, password);
 			// if the user is authenticated then get requests from the user and process them 
-			if(customer != null) {
+			if(customerID != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
 					String request = in.readLine();
-					System.out.println("Request from " + customer.getKey());
-					String responce = bank.processRequest(customer, request);
+					System.out.println("Request from " + customerID.getKey());
+					String responce = bank.processRequest(customerID, request);
 					out.println(responce);
 				}
 			}
