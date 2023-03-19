@@ -25,11 +25,12 @@ public class Customer implements Serializable {
 	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
 		this.userName = userName;
 		this.password = password;
-		this.firstName =firstName;
+		this.firstName = firstName;
 		this.lastName = lastName;
 		this.customerAddress = address;
 		this.customerEmailAddress = email;
 		// To do: add info on accounts
+		accounts = new ArrayList<>();
 	}
 
 	public Customer(){

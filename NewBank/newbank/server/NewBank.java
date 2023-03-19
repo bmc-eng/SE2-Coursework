@@ -34,9 +34,14 @@ public class NewBank {
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
 
+		Customer test = new Customer("test", "test123", "T.", 
+							"Est", "London", "test@test.com");
+		test.addAccount(new Account("Checking",1000.0));
+
 		serializeCustomers("bhagy", bhagy);
 		serializeCustomers("christina", christina);
 		serializeCustomers("john", john);
+		serializeCustomers("test", test);
 		
 
 	}
@@ -59,11 +64,18 @@ public class NewBank {
 		return bank;
 	}
 	
-	public synchronized CustomerID checkLogInDetails(String userName, String password) {
+	// Added code for serialised users 
+	public synchronized CustomerID checkLogInDetails(String userName, String password, Customer customer) {
+		if (customer.getUsername().contains(userName) && customer.getPassword().contains(password)){
+			return new CustomerID(userName);
+		}
+		return null;
+		/* 
 		if(customers.containsKey(userName)) {
 			return new CustomerID(userName);
 		}
 		return null;
+		*/
 	}
 
 	// commands from the NewBank customer are processed in this method

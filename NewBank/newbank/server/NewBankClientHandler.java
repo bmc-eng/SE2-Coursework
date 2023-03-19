@@ -55,7 +55,7 @@ public class NewBankClientHandler extends Thread{
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// Check if the username is in the database
-			Customer customer = db.getCustomer(userName);
+			Customer customer = db.getCustomer(userName, true);
 			if (customer == null){
 				out.println("Username does not exist...");
 				welcomeMenu();
@@ -71,7 +71,7 @@ public class NewBankClientHandler extends Thread{
 			}
 			
 			// authenticate user and get customer ID token from bank for use in subsequent requests
-			CustomerID customerID = bank.checkLogInDetails(userName, password);
+			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
 			// if the user is authenticated then get requests from the user and process them 
 			if(customerID != null) {
 				out.println("Log In Successful. What do you want to do?");
@@ -110,8 +110,8 @@ public class NewBankClientHandler extends Thread{
 			out.println("phone number: ");
 			String phone = in.readLine();
 			Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
-			// Write the customer data to the database
-			db.addCustomer(newCustomer);
+			// Write the customer data to the database - using serialisation
+			db.addCustomer(newCustomer, true);
 		}
 		catch(IOException e){
 			System.out.println("Account creation failed; please try again");
