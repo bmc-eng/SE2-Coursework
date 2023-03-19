@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.io.Console;
 
 public class NewBankClientHandler extends Thread{
 	
@@ -26,6 +27,7 @@ public class NewBankClientHandler extends Thread{
 		out.println("Welcome to NewBank!");
 		out.println("1. Login");
 		out.println("2. Create account");
+		out.println("3. Exit");
 		out.println("Enter option (number)");
 		try{
 			String response = in.readLine();
@@ -34,6 +36,10 @@ public class NewBankClientHandler extends Thread{
 			}
 			if (response.contains("2")){
 				createAccount();
+			}
+			if (response.contains("3")){
+				// exit the thread
+				return;
 			}
 		}
 		catch(IOException e){
@@ -44,6 +50,7 @@ public class NewBankClientHandler extends Thread{
 	}
 	
 	public void login(){
+		
 		try{
 			out.println("Enter Username");
 			String userName = in.readLine();
@@ -53,9 +60,14 @@ public class NewBankClientHandler extends Thread{
 				out.println("Username does not exist...");
 				welcomeMenu();
 			}
-			// ask for password
-			out.println("Enter Password");
-			String password = in.readLine();
+			// ask for password - use Console to mask the password from screen
+			//out.println("Enter Password");
+
+			// Mask the password
+			Console console = System.console();
+			char[] passwordArray = console.readPassword("Enter Password: ");
+			String password = new String(passwordArray);
+
 			out.println("Checking Details...");
 			if(!customer.getPassword().contentEquals(password)){
 				out.println("Password invalid");
