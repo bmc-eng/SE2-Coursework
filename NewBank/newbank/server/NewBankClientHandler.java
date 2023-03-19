@@ -43,9 +43,7 @@ public class NewBankClientHandler extends Thread{
 		}
 		catch(IOException e){
 			e.printStackTrace();
-			// adding in error reporting to user
-			out.println("Error has occurred");
-			out.println();
+			
 		}
 		// Recursively remain on this menu until either 1 or 2 is selected
 		welcomeMenu();
