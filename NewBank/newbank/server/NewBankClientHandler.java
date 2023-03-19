@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.io.Console;
 
 public class NewBankClientHandler extends Thread{
 	
@@ -44,6 +43,9 @@ public class NewBankClientHandler extends Thread{
 		}
 		catch(IOException e){
 			e.printStackTrace();
+			// adding in error reporting to user
+			out.println("Error has occurred");
+			out.println();
 		}
 		// Recursively remain on this menu until either 1 or 2 is selected
 		welcomeMenu();
@@ -61,12 +63,8 @@ public class NewBankClientHandler extends Thread{
 				welcomeMenu();
 			}
 			// ask for password - use Console to mask the password from screen
-			//out.println("Enter Password");
-
-			// Mask the password
-			Console console = System.console();
-			char[] passwordArray = console.readPassword("Enter Password: ");
-			String password = new String(passwordArray);
+			out.println("Enter Password");
+			String password = in.readLine();
 
 			out.println("Checking Details...");
 			if(!customer.getPassword().contentEquals(password)){
