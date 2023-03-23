@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.io.Console;
 
 public class ExampleClient extends Thread{
 	
@@ -13,25 +15,41 @@ public class ExampleClient extends Thread{
 	private PrintWriter bankServerOut;	
 	private BufferedReader userInput;
 	private Thread bankServerResponceThread;
+
+	// Variable for determining if the client will need to hide the password input
+	private AtomicBoolean isPasswordInputExpected;
 	
 	public ExampleClient(String ip, int port) throws UnknownHostException, IOException {
 		server = new Socket(ip,port);
 		userInput = new BufferedReader(new InputStreamReader(System.in)); 
 		bankServerOut = new PrintWriter(server.getOutputStream(), true); 
+
+		isPasswordInputExpected = new AtomicBoolean(false);
 		
 		bankServerResponceThread = new Thread() {
 			private BufferedReader bankServerIn = new BufferedReader(new InputStreamReader(server.getInputStream())); 
 			public void run() {
 				try {
 					while(true) {
-						String responce = bankServerIn.readLine();
+						String response = bankServerIn.readLine();
 						// Code to prevent a null error if the user isn't logged in
-						if (responce == null){
+						
+						if (response == null){
 							// Terminate the loop - need to use System.exit in order to 
 							// kill all open threads for the client.
 							System.exit(0);
 						} else {
-							System.out.println(responce);
+
+							// Set up the client to input a password
+							String responseString = response.toString();
+							
+							// Need to set this up before enter password is displayed
+							if (responseString.contains("Enter Username")){
+								isPasswordInputExpected.set(true);
+							} else {
+								isPasswordInputExpected.set(false);
+							}
+							System.out.println(response);
 						}
 						
 					}
@@ -49,17 +67,28 @@ public class ExampleClient extends Thread{
 	
 	
 	public void run() {
-		while(true) {
+		// This block handles all user input from the client
+		//while(true){}
 			try {
 				while(true) {
-					String command = userInput.readLine();
+					String command;
+					if (isPasswordInputExpected.get()){
+						// Expecting to get a password from the user
+						Console console = System.console();
+						char[] passwordArray = console.readPassword();
+						command = new String (passwordArray);
+						isPasswordInputExpected.set(false);
+					} else {
+						command = userInput.readLine();
+					}
+					
 					bankServerOut.println(command);
 				}				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		//}
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {

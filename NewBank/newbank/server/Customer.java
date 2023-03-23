@@ -1,19 +1,36 @@
 package newbank.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Customer {
+public class Customer implements Serializable {
 	
 	private ArrayList<Account> accounts;
 	private String customerEmailAddress;
 	private String customerAddress;
 	private String customerPhoneNumber; 
+	private String firstName;
+	private String lastName;
+	private String userName;
+	private String password;
 	
 	public Customer(String email, String address, String phone) {
 		accounts = new ArrayList<>();
 		customerEmailAddress = email; 
 		customerAddress = address; 
 		customerPhoneNumber = phone; 
+	}
+
+	// Adding a specific constructor method for populating from Database
+	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.customerAddress = address;
+		this.customerEmailAddress = email;
+		// To do: add info on accounts
+		accounts = new ArrayList<>();
 	}
 
 	public Customer(){
@@ -30,6 +47,22 @@ public class Customer {
 
 	public void addAccount(Account account) {
 		accounts.add(account);		
+	}
+
+	public String getUsername(){
+		return userName;
+	}
+
+	public String getPassword(){
+		return password;
+	}
+
+	public String getFirstName(){
+		return firstName;
+	}
+
+	public String getLastName(){
+		return lastName;
 	}
 
 	public String getEmail(){

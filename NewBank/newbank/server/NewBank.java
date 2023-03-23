@@ -1,5 +1,8 @@
 package newbank.server;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 public class NewBank {
@@ -9,10 +12,16 @@ public class NewBank {
 	
 	private NewBank() {
 		customers = new HashMap<>();
-		addTestData();
+		try {
+			addTestData();
+		} catch (IOException ioe){
+			System.out.println("Error");
+		}
+		
 	}
 	
-	private void addTestData() {
+	private void addTestData() throws IOException {
+		System.out.println("Setting up...");
 		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account("Main", 1000.0));
 		customers.put("Bhagy", bhagy);
@@ -24,17 +33,49 @@ public class NewBank {
 		Customer john = new Customer();
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
+
+		Customer test = new Customer("test", "test123", "T.", 
+							"Est", "London", "test@test.com");
+		test.addAccount(new Account("Checking",1000.0));
+
+		serializeCustomers("bhagy", bhagy);
+		serializeCustomers("christina", christina);
+		serializeCustomers("john", john);
+		serializeCustomers("test", test);
+		
+
+	}
+
+	private void serializeCustomers(String name, Customer c) throws IOException{
+		// Try to serialise the data
+		try {
+			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
+													+ name.toLowerCase() + ".obj");
+			ObjectOutputStream objectOutputStream  = new ObjectOutputStream(fos);
+    		objectOutputStream.writeObject(c);
+    		objectOutputStream.flush();
+    		objectOutputStream.close();
+		} catch(IOException ioe) {
+			System.out.println("Error: " + ioe.toString());
+		}
 	}
 	
 	public static NewBank getBank() {
 		return bank;
 	}
 	
-	public synchronized CustomerID checkLogInDetails(String userName, String password) {
+	// Added code for serialised users 
+	public synchronized CustomerID checkLogInDetails(String userName, String password, Customer customer) {
+		if (customer.getUsername().contains(userName) && customer.getPassword().contains(password)){
+			return new CustomerID(userName);
+		}
+		return null;
+		/* 
 		if(customers.containsKey(userName)) {
 			return new CustomerID(userName);
 		}
 		return null;
+		*/
 	}
 
 	// commands from the NewBank customer are processed in this method
