@@ -45,6 +45,10 @@ public class Customer implements Serializable {
 		return s;
 	}
 
+	public ArrayList<Account> getAccounts(){
+		return this.accounts;
+	}
+
 	public void addAccount(Account account) {
 		accounts.add(account);		
 	}

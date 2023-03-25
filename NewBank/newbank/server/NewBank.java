@@ -9,6 +9,7 @@ public class NewBank {
 	
 	private static final NewBank bank = new NewBank();
 	private HashMap<String,Customer> customers;
+	private Database db;
 	
 	private NewBank() {
 		customers = new HashMap<>();
@@ -79,18 +80,36 @@ public class NewBank {
 	}
 
 	// commands from the NewBank customer are processed in this method
-	public synchronized String processRequest(CustomerID customer, String request) {
-		if(customers.containsKey(customer.getKey())) {
+	public synchronized String processRequest(Customer customer, String request) {
+		try{
 			switch(request) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 			default : return "FAIL";
-			}
+			case "NEWCURRENT" : return addCurrentAccount(customer);
 		}
-		return "FAIL";
+		}
+		catch( Exception e){
+			return "FAIL";
+		}
 	}
 	
-	private String showMyAccounts(CustomerID customer) {
-		return (customers.get(customer.getKey())).accountsToString();
+	private String showMyAccounts(Customer customer) {
+		return customer.accountsToString();
+	}
+
+	public String addCurrentAccount(Customer customer){
+		// Check if customer has an existing current account
+		for(Account a: customer.getAccounts()){
+			if (a.getType().contentEquals("Current")){
+				return "Current account already exists!";
+			}
+		}
+		Account account = new Account(customer.getFirstName()+"Current", 0);
+		customer.addAccount(account);
+		db.addCustomer(customer, true);
+		// Need to re-serialise the object to save changes
+		return "Current account added";
+
 	}
 
 	public void addNewCustomer(Customer newCustomer, String key){

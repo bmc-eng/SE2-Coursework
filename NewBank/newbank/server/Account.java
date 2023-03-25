@@ -6,6 +6,7 @@ public class Account implements Serializable {
 	
 	private String accountName;
 	private double openingBalance;
+	private String type;
 
 	public Account(String accountName, double openingBalance) {
 		this.accountName = accountName;
@@ -14,6 +15,10 @@ public class Account implements Serializable {
 	
 	public String toString() {
 		return (accountName + ": " + openingBalance);
+	}
+
+	public String getType(){
+		return this.type;
 	}
 
 }
