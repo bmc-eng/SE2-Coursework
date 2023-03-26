@@ -15,13 +15,15 @@ public class Database {
     public File csv;
     public FileReader csvReader;
 
+    private static final String dbLocation = "newbank/server/DatabaseFiles/";
+
     // Constructor method     
     public Database(){
-        //csv = new File("NewBank/newbank/server/DatabaseFiles/db.csv");
+        
     }
     
     public Customer getCustomer(String userName, boolean isSerialized) {
-        File userNameFile = new File("NewBank/newbank/server/DatabaseFiles/" + userName.toLowerCase() + ".obj");
+        File userNameFile = new File(dbLocation + userName.toLowerCase() + ".obj");
 
         // Try to find the name of existing customer
         try{
@@ -44,8 +46,7 @@ public class Database {
         // add the customer into the database
         // Try to serialise the data
 		try {
-            File newUser = new File ("NewBank/newbank/server/DatabaseFiles/" 
-            + customer.getUsername().toLowerCase() + ".obj");
+            File newUser = new File (dbLocation + customer.getUsername().toLowerCase() + ".obj");
 			FileOutputStream fos = new FileOutputStream(newUser);
 			ObjectOutputStream oos  = new ObjectOutputStream(fos);
     		oos.writeObject(customer);
@@ -59,8 +60,7 @@ public class Database {
     public boolean updateCustomer(Customer customer){
         // This is for updating information on a customer and write back
         try {
-            File updatedUser = new File ("NewBank/newbank/server/DatabaseFiles/" 
-                                    + customer.getUsername().toLowerCase() + ".obj");
+            File updatedUser = new File (dbLocation + customer.getUsername().toLowerCase() + ".obj");
 			FileOutputStream fos = new FileOutputStream(updatedUser);
 			ObjectOutputStream oos  = new ObjectOutputStream(fos);
     		oos.writeObject(customer);

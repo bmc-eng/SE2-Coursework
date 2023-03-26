@@ -44,6 +44,7 @@ public class NewBank {
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
 				
+				
 				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
 		}
 		}
