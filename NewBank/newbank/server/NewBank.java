@@ -1,8 +1,5 @@
 package newbank.server;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 public class NewBank {
@@ -23,21 +20,6 @@ public class NewBank {
 		}
 		*/
 		
-	}
-	
-
-	private void serializeCustomers(String name, Customer c) throws IOException{
-		// Try to serialise the data
-		try {
-			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
-													+ name.toLowerCase() + ".obj");
-			ObjectOutputStream objectOutputStream  = new ObjectOutputStream(fos);
-    		objectOutputStream.writeObject(c);
-    		objectOutputStream.flush();
-    		objectOutputStream.close();
-		} catch(IOException ioe) {
-			System.out.println("Error: " + ioe.toString());
-		}
 	}
 	
 	public static NewBank getBank() {
