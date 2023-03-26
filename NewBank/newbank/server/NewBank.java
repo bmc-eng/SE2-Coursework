@@ -13,7 +13,7 @@ public class NewBank {
 	
 	private NewBank() {
 		customers = new HashMap<>();
-
+		db = new Database();
 		// NOT NEEDED
 		/* 
 		try {
@@ -25,31 +25,6 @@ public class NewBank {
 		
 	}
 	
-	private void addTestData() throws IOException {
-		System.out.println("Setting up...");
-		Customer bhagy = new Customer();
-		bhagy.addAccount(new Account("Main", 1000.0));
-		customers.put("Bhagy", bhagy);
-		
-		Customer christina = new Customer();
-		christina.addAccount(new Account("Savings", 1500.0));
-		customers.put("Christina", christina);
-		
-		Customer john = new Customer();
-		john.addAccount(new Account("Checking", 250.0));
-		customers.put("John", john);
-
-		Customer test = new Customer("test", "test123", "T.", 
-							"Est", "London", "test@test.com");
-		test.addAccount(new Account("Checking",1000.0));
-
-		serializeCustomers("bhagy", bhagy);
-		serializeCustomers("christina", christina);
-		serializeCustomers("john", john);
-		serializeCustomers("test", test);
-		
-
-	}
 
 	private void serializeCustomers(String name, Customer c) throws IOException{
 		// Try to serialise the data
@@ -118,6 +93,35 @@ public class NewBank {
 
 	public void addNewCustomer(Customer newCustomer, String key){
 		customers.put(key, newCustomer);
+	}
+
+	// ***************************************************************
+	// ******* INITIAL SET UP Method - not needed once accounts set up
+	// ***************************************************************
+	private void addTestData() throws IOException {
+		System.out.println("Setting up...");
+		Customer bhagy = new Customer();
+		bhagy.addAccount(new Account("Main", 1000.0));
+		customers.put("Bhagy", bhagy);
+		
+		Customer christina = new Customer();
+		christina.addAccount(new Account("Savings", 1500.0));
+		customers.put("Christina", christina);
+		
+		Customer john = new Customer();
+		john.addAccount(new Account("Checking", 250.0));
+		customers.put("John", john);
+
+		Customer test = new Customer("test", "test123", "T.", 
+							"Est", "London", "test@test.com");
+		test.addAccount(new Account("Checking",1000.0));
+
+		db.addCustomer(bhagy, true);
+		db.addCustomer(christina, true);
+		db.addCustomer(john, true);
+		db.addCustomer(test, true);
+		
+
 	}
 
 }
