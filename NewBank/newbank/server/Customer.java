@@ -118,7 +118,7 @@ public class Customer implements Serializable {
 								"Address: " + customerAddress + "\n" +
 								"Phone Number: " + customerPhoneNumber + "\n" +
 								"Email: " + customerEmailAddress + "\n\n" +
-								"ACCOUNT DETAILS: \n\n" + accountsToString();
+								"ACCOUNT DETAILS: \n" + accountsToString();
 		return customerInfo;  
 	}
 }

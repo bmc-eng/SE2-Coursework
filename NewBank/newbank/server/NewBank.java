@@ -40,13 +40,16 @@ public class NewBank {
 		*/
 	}
 
-	// commands from the NewBank customer are processed in this method
+	// commands from the NewBank customer are processed in this method. 
 	public synchronized String processRequest(Customer customer, String request) {
+		// Split the request up into different strings - this will enable multiple commands on one line
+		String[] requests = request.split(" ");
 		try{
-			switch(request) {
+			switch(requests[0]) {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
 				case "INFO" : return showFullDetails(customer);
+				
 				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
 		}
 		}
