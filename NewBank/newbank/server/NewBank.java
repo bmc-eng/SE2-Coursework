@@ -13,11 +13,15 @@ public class NewBank {
 	
 	private NewBank() {
 		customers = new HashMap<>();
+
+		// NOT NEEDED
+		/* 
 		try {
 			addTestData();
 		} catch (IOException ioe){
 			System.out.println("Error");
 		}
+		*/
 		
 	}
 	
