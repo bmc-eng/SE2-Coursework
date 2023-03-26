@@ -9,7 +9,7 @@ public class NewBank {
 	
 	private static final NewBank bank = new NewBank();
 	private HashMap<String,Customer> customers;
-	private Database db;
+	private Database db = new Database();
 	
 	private NewBank() {
 		customers = new HashMap<>();
@@ -24,20 +24,20 @@ public class NewBank {
 	private void addTestData() throws IOException {
 		System.out.println("Setting up...");
 		Customer bhagy = new Customer();
-		bhagy.addAccount(new Account("Main", 1000.0));
+		bhagy.addAccount(new Account("Main", 1000.0, "Current"));
 		customers.put("Bhagy", bhagy);
 		
 		Customer christina = new Customer();
-		christina.addAccount(new Account("Savings", 1500.0));
+		christina.addAccount(new Account("Savings", 1500.0,"Current"));
 		customers.put("Christina", christina);
 		
 		Customer john = new Customer();
-		john.addAccount(new Account("Checking", 250.0));
+		john.addAccount(new Account("Checking", 250.0,"Current"));
 		customers.put("John", john);
 
 		Customer test = new Customer("test", "test123", "T.", 
 							"Est", "London", "test@test.com");
-		test.addAccount(new Account("Checking",1000.0));
+		test.addAccount(new Account("Checking",1000.0,"Current"));
 
 		serializeCustomers("bhagy", bhagy);
 		serializeCustomers("christina", christina);
@@ -89,7 +89,8 @@ public class NewBank {
 		}
 		}
 		catch( Exception e){
-			return "FAIL";
+			return e.getMessage(); // Return error message for resolving errors in development phase
+			//return "FAIL";
 		}
 	}
 	
@@ -104,7 +105,7 @@ public class NewBank {
 				return "Current account already exists!";
 			}
 		}
-		Account account = new Account(customer.getFirstName()+"Current", 0);
+		Account account = new Account(customer.getFirstName()+"Current", 0, "Current");
 		customer.addAccount(account);
 		db.addCustomer(customer, true);
 		// Need to re-serialise the object to save changes
