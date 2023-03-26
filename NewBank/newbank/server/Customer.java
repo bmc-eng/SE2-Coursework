@@ -33,6 +33,7 @@ public class Customer implements Serializable {
 		this.customerEmailAddress = email;
 		// To do: add info on accounts
 		accounts = new ArrayList<>();
+		
 	}
 
 	 
@@ -49,6 +50,24 @@ public class Customer implements Serializable {
 			s += a.toString() + "\n";
 		}
 		return s;
+	}
+
+	public double getCurrentBalance(){
+		Account a = getCurrentAccount();
+		if (a != null){
+			return a.getBalance();
+		} else {
+			return 0.0;
+		}
+	}
+
+	public Account getCurrentAccount(){
+		for (Account a: accounts) {
+			if (a.getType().toLowerCase().contains("current")){
+				return a;
+			}
+		}
+		return null;
 	}
 
 	public ArrayList<Account> getAccounts(){

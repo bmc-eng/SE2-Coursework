@@ -56,17 +56,20 @@ public class Database {
 		}
     }
 
-    public void updateCustomer(Customer customer){
+    public boolean updateCustomer(Customer customer){
         // This is for updating information on a customer and write back
         try {
-			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
-													+ customer.getUsername().toLowerCase() + ".obj");
+            File updatedUser = new File ("NewBank/newbank/server/DatabaseFiles/" 
+                                    + customer.getUsername().toLowerCase() + ".obj");
+			FileOutputStream fos = new FileOutputStream(updatedUser);
 			ObjectOutputStream oos  = new ObjectOutputStream(fos);
     		oos.writeObject(customer);
     		oos.flush();
     		oos.close();
+            return true;
 		} catch(IOException ioe) {
 			System.out.println("Error: " + ioe.toString());
+            return false;
 		}
     }
 

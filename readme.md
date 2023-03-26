@@ -1,8 +1,11 @@
 # A New Bank
 
-A New Bank is an API based banking app that runs in the command line.
+A New Bank is an API based banking app that runs in the command line. Supported operations:
 
-
+SHOWALLACCOUNTS
+NEWCURRENT
+INFO
+TRANSFER 100.0 TO userName
 
 
 ## Sprint Rotation
