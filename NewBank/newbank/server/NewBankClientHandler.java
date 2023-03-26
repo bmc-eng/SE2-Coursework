@@ -97,6 +97,9 @@ public class NewBankClientHandler extends Thread{
 		try{
 			out.println("Username: ");
 			String userName = in.readLine();
+
+			// TODO: Check if the username already exists
+
 			out.println("Password: ");
 			String password = in.readLine();
 			// TO DO: Encrypt password before writing to database

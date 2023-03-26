@@ -11,14 +11,14 @@ public class NewBank {
 	private NewBank() {
 		customers = new HashMap<>();
 		db = new Database();
+		
 		// NOT NEEDED
-		/* 
 		try {
 			addTestData();
 		} catch (IOException ioe){
 			System.out.println("Error");
 		}
-		*/
+		
 		
 	}
 	
@@ -44,14 +44,19 @@ public class NewBank {
 	public synchronized String processRequest(Customer customer, String request) {
 		try{
 			switch(request) {
-			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-			default : return "FAIL";
-			case "NEWCURRENT" : return addCurrentAccount(customer);
+				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
+				case "NEWCURRENT" : return addCurrentAccount(customer);
+				case "INFO" : return showFullDetails(customer);
+				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
 		}
 		}
 		catch( Exception e){
 			return "FAIL";
 		}
+	}
+
+	private String showFullDetails(Customer customer) {
+		return customer.getCustomerInformation();
 	}
 	
 	private String showMyAccounts(Customer customer) {
@@ -82,15 +87,15 @@ public class NewBank {
 	// ***************************************************************
 	private void addTestData() throws IOException {
 		System.out.println("Setting up...");
-		Customer bhagy = new Customer();
+		Customer bhagy = new Customer("bhagy", " ");
 		bhagy.addAccount(new Account("Main", 1000.0));
 		customers.put("Bhagy", bhagy);
 		
-		Customer christina = new Customer();
+		Customer christina = new Customer("christina", " ");
 		christina.addAccount(new Account("Savings", 1500.0));
 		customers.put("Christina", christina);
 		
-		Customer john = new Customer();
+		Customer john = new Customer("john", " ");
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
 

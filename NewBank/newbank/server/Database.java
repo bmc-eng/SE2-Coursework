@@ -21,7 +21,7 @@ public class Database {
     }
     
     public Customer getCustomer(String userName, boolean isSerialized) {
-        String userNameFile = "../NewBank/newbank/server/DatabaseFiles/" + userName.toLowerCase() + ".obj";
+        File userNameFile = new File("NewBank/newbank/server/DatabaseFiles/" + userName.toLowerCase() + ".obj");
 
         // Try to find the name of existing customer
         try{
@@ -44,8 +44,9 @@ public class Database {
         // add the customer into the database
         // Try to serialise the data
 		try {
-			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
-													+ customer.getUsername().toLowerCase() + ".obj");
+            File newUser = new File ("NewBank/newbank/server/DatabaseFiles/" 
+            + customer.getUsername().toLowerCase() + ".obj");
+			FileOutputStream fos = new FileOutputStream(newUser);
 			ObjectOutputStream oos  = new ObjectOutputStream(fos);
     		oos.writeObject(customer);
     		oos.flush();
