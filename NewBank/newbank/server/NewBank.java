@@ -13,11 +13,13 @@ public class NewBank {
 		db = new Database();
 		
 		// NOT NEEDED
+		/* 
 		try {
 			addTestData();
 		} catch (IOException ioe){
 			System.out.println("Error");
 		}
+		*/
 		
 	}
 	
