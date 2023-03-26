@@ -110,7 +110,7 @@ public class NewBank {
 		db.addCustomer(customer, true);
 		// Need to re-serialise the object to save changes
 		return "Current account added";
-
+		
 	}
 
 	public void addNewCustomer(Customer newCustomer, String key){

@@ -54,8 +54,11 @@ public class NewBankClientHandler extends Thread{
 		try{
 			out.println("Enter Username");
 			String userName = in.readLine();
+			// Testing
+			String result = db.getCustomerTest(userName);
+			out.println(result);
 			// Check if the username is in the database
-			Customer customer = db.getCustomer(userName, true);
+			Customer customer = db.getCustomer(userName);
 			if (customer == null){
 				out.println("Username does not exist...");
 				welcomeMenu();
@@ -78,7 +81,7 @@ public class NewBankClientHandler extends Thread{
 				while(true) {
 					String request = in.readLine();
 					System.out.println("Request from " + customerID.getKey());
-					String responce = bank.processRequest(customerID, request);
+					String responce = bank.processRequest(customer, request);
 					out.println(responce);
 				}
 			}
