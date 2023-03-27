@@ -79,6 +79,9 @@ public class NewBankClientHandler extends Thread{
 				while(true) {
 					String request = in.readLine();
 					System.out.println("Request from " + customerID.getKey());
+					// Refresh customer details:
+					customer = db.getCustomer(userName, true);
+					// Changed to customer object
 					String responce = bank.processRequest(customer, request);
 					out.println(responce);
 				}
@@ -97,6 +100,9 @@ public class NewBankClientHandler extends Thread{
 		try{
 			out.println("Username: ");
 			String userName = in.readLine();
+
+			// TODO: Check if the username already exists
+
 			out.println("Password: ");
 			String password = in.readLine();
 			// TO DO: Encrypt password before writing to database

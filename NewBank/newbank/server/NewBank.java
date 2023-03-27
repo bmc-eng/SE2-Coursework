@@ -1,8 +1,5 @@
 package newbank.server;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 public class NewBank {
@@ -13,52 +10,17 @@ public class NewBank {
 	
 	private NewBank() {
 		customers = new HashMap<>();
+		db = new Database();
+		
+		// NOT NEEDED
+		/* 
 		try {
 			addTestData();
 		} catch (IOException ioe){
 			System.out.println("Error");
 		}
+		*/
 		
-	}
-	
-	private void addTestData() throws IOException {
-		System.out.println("Setting up...");
-		Customer bhagy = new Customer();
-		bhagy.addAccount(new Account("Main", 1000.0, "Current"));
-		customers.put("Bhagy", bhagy);
-		
-		Customer christina = new Customer();
-		christina.addAccount(new Account("Savings", 1500.0,"Current"));
-		customers.put("Christina", christina);
-		
-		Customer john = new Customer();
-		john.addAccount(new Account("Checking", 250.0,"Current"));
-		customers.put("John", john);
-
-		Customer test = new Customer("test", "test123", "T.", 
-							"Est", "London", "test@test.com");
-		test.addAccount(new Account("Checking",1000.0,"Current"));
-
-		serializeCustomers("bhagy", bhagy);
-		serializeCustomers("christina", christina);
-		serializeCustomers("john", john);
-		serializeCustomers("test", test);
-		
-
-	}
-
-	private void serializeCustomers(String name, Customer c) throws IOException{
-		// Try to serialise the data
-		try {
-			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
-													+ name.toLowerCase() + ".obj");
-			ObjectOutputStream objectOutputStream  = new ObjectOutputStream(fos);
-    		objectOutputStream.writeObject(c);
-    		objectOutputStream.flush();
-    		objectOutputStream.close();
-		} catch(IOException ioe) {
-			System.out.println("Error: " + ioe.toString());
-		}
 	}
 	
 	public static NewBank getBank() {
@@ -71,27 +33,87 @@ public class NewBank {
 			return new CustomerID(userName);
 		}
 		return null;
-		/* 
-		if(customers.containsKey(userName)) {
-			return new CustomerID(userName);
-		}
-		return null;
-		*/
 	}
 
-	// commands from the NewBank customer are processed in this method
+	// commands from the NewBank customer are processed in this method. 
 	public synchronized String processRequest(Customer customer, String request) {
+		// Split the request up into different strings - this will enable multiple commands on one line
+		String[] requests = request.split(" ");
 		try{
-			switch(request) {
-			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-			default : return "FAIL";
-			case "NEWCURRENT" : return addCurrentAccount(customer);
+			switch(requests[0]) {
+				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
+				case "NEWCURRENT" : return addCurrentAccount(customer);
+				case "INFO" : return showFullDetails(customer);
+				case "TRANSFER" : return transferToUser(customer, requests);
+				
+				
+				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
 		}
 		}
 		catch( Exception e){
 			return e.getMessage(); // Return error message for resolving errors in development phase
 			//return "FAIL";
 		}
+	}
+
+	// Method to transfer money from one account to another
+	// Only support checking to checking accounts - TRANSFER 100.0 john
+	private String transferToUser(Customer customer, String[] instructions) {
+		// Deconstruct the request
+		double amountToTransfer;
+		Customer userToTransfer;
+
+		try {
+			amountToTransfer = Double.parseDouble(instructions[1]);
+		} catch (NumberFormatException e){
+			return "Please enter a valid amount to transfer";
+		}
+
+		// Get the customer object of the person to transfer money to
+		userToTransfer = db.getCustomer(instructions[3], true);
+		if (userToTransfer == null){
+			return "Unknown recipient of transfer - check username and try again";
+		}
+		
+		// Check that the customer has enough money to transfer
+		if (customer.getCurrentBalance() >= amountToTransfer){
+			// Transfer can start to proceed
+
+			// Step 1: Remove the money from the transfer's account
+			boolean hasLeftCurrent = customer.getCurrentAccount().transferAmount(amountToTransfer);
+
+			// Step 2: add this into the transferees current account
+			boolean hasTransfered;
+			if (userToTransfer.getCurrentAccount() == null){
+				userToTransfer.addAccount(new Account("current",0.0, "current"));
+				hasTransfered = userToTransfer.getCurrentAccount().addMoney(amountToTransfer);
+			} else {
+				hasTransfered = userToTransfer.getCurrentAccount().addMoney(amountToTransfer);
+			}
+
+			// Step 3: Update the records
+			if (hasLeftCurrent && hasTransfered){
+				if (db.updateCustomer(customer) && db.updateCustomer(userToTransfer)){
+					return "Successfully transferred " + amountToTransfer + " to " + userToTransfer.getUsername();
+				} else {
+					// Reverse transaction
+					userToTransfer.getCurrentAccount().transferAmount(amountToTransfer);
+					customer.getCurrentAccount().addMoney(amountToTransfer);
+					return "Transaction unsuccessful - DB error";
+				}
+					
+			} else {
+				return "Transaction unsuccessful - Problem transferring";
+			}
+
+		} else {
+			return "Insufficient funds to complete transfer";
+		}
+
+	}
+
+	private String showFullDetails(Customer customer) {
+		return customer.getCustomerInformation();
 	}
 	
 	private String showMyAccounts(Customer customer) {
@@ -115,6 +137,35 @@ public class NewBank {
 
 	public void addNewCustomer(Customer newCustomer, String key){
 		customers.put(key, newCustomer);
+	}
+
+	// ***************************************************************
+	// ******* INITIAL SET UP Method - not needed once accounts set up
+	// ***************************************************************
+	private void addTestData() throws IOException {
+		System.out.println("Setting up...");
+		Customer bhagy = new Customer("bhagy", " ");
+		bhagy.addAccount(new Account("main", 1000.0, "current"));
+		customers.put("Bhagy", bhagy);
+		
+		Customer christina = new Customer("christina", " ");
+		christina.addAccount(new Account("Savings", 1500.0, "savings"));
+		customers.put("Christina", christina);
+		
+		Customer john = new Customer("john", " ");
+		john.addAccount(new Account("checking", 250.0, "current"));
+		customers.put("John", john);
+
+		Customer test = new Customer("test", "test123", "T.", 
+							"Est", "London", "test@test.com");
+		test.addAccount(new Account("Current",1000.0, "current"));
+
+		db.addCustomer(bhagy, true);
+		db.addCustomer(christina, true);
+		db.addCustomer(john, true);
+		db.addCustomer(test, true);
+		
+
 	}
 
 }

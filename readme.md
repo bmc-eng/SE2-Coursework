@@ -1,8 +1,11 @@
 # A New Bank
 
-A New Bank is an API based banking app that runs in the command line.
+A New Bank is an API based banking app that runs in the command line. Supported operations:
 
-
+SHOWALLACCOUNTS
+NEWCURRENT
+INFO
+TRANSFER 100.0 TO userName
 
 
 ## Sprint Rotation
@@ -11,12 +14,12 @@ Contributions are always welcome!
 
 | Week| Scrum Master| Product Owner | Scrum Team |  
 | ------------- | ------------- | --------    | ------|
-| 1 | Ben | Luke   | Bradley, Ali, Sam, Ray |
-| 2 | Bradley | Sam | Ali, Luke, Ray, Ben |
-| 3 | Ali | Ray | Luke, Ben, Sam, Bradley|
-| 4 | Luke | Ben | Bradley, Ali, Sam, Ray |
-| 5 | Sam | Bradley | Ali, Luke, Ray, Ben |
-| 6 | Ray | Ali | Luke, Ben, Sam, Bradley|
+| 1 | Ben | Luke  | Bradley, Sam |
+| 2 | Bradley | Sam |Luke,  Ben |
+| 3 | Luke | Ben | Bradley, Sam |
+| 4 | Sam | Bradley | Luke, Ben |
+| 5 | Ben | Luke  | Bradley, Sam |
+| 6 | Bradley | Sam |Luke,  Ben |
 
 ## Getting started with git
 

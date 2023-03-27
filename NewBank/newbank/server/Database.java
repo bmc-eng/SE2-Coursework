@@ -1,9 +1,8 @@
 package newbank.server;
 
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 // Serialised libraries
@@ -16,13 +15,67 @@ public class Database {
     public File csv;
     public FileReader csvReader;
 
-    // Constructor method -- assigns file path value    
+    private static final String dbLocation = "newbank/server/DatabaseFiles/";
+
+    // Constructor method     
     public Database(){
-    csv = new File("NewBank/newbank/server/DatabaseFiles/db.csv");
+        
     }
+    
+    public Customer getCustomer(String userName, boolean isSerialized) {
+        File userNameFile = new File(dbLocation + userName.toLowerCase() + ".obj");
+
+        // Try to find the name of existing customer
+        try{
+            FileInputStream fis = new FileInputStream(userNameFile);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Customer customer = (Customer) ois.readObject();
+            ois.close(); 
+            return customer;
+        } catch (IOException ioe) {
+            System.out.println(ioe);
+            return null;
+        } catch (ClassNotFoundException cnf){
+            System.out.println(cnf);
+            return null;
+        }
+
+    }
+
+    public void addCustomer(Customer customer, boolean isSerialized){
+        // add the customer into the database
+        // Try to serialise the data
+		try {
+            File newUser = new File (dbLocation + customer.getUsername().toLowerCase() + ".obj");
+			FileOutputStream fos = new FileOutputStream(newUser);
+			ObjectOutputStream oos  = new ObjectOutputStream(fos);
+    		oos.writeObject(customer);
+    		oos.flush();
+    		oos.close();
+		} catch(IOException ioe) {
+			System.out.println("Error: " + ioe.toString());
+		}
+    }
+
+    public boolean updateCustomer(Customer customer){
+        // This is for updating information on a customer and write back
+        try {
+            File updatedUser = new File (dbLocation + customer.getUsername().toLowerCase() + ".obj");
+			FileOutputStream fos = new FileOutputStream(updatedUser);
+			ObjectOutputStream oos  = new ObjectOutputStream(fos);
+    		oos.writeObject(customer);
+    		oos.flush();
+    		oos.close();
+            return true;
+		} catch(IOException ioe) {
+			System.out.println("Error: " + ioe.toString());
+            return false;
+		}
+    }
+
     /*
     NOTE: To handle the multi-threaded process, open and close the file with each action. DO NOT leave file open longer than neccesary. 
-    */ 
+     
 
     // Helper method to open the CSV file
     public FileReader openFile(File csv){
@@ -94,44 +147,8 @@ public class Database {
         closeFile(this.csvReader);
         return null;
     }
+    */
 
-    // ####################################
-    // CODE FOR MANAGEMENT OF SERIALIZATION 
-    // ####################################
-    public Customer getCustomer(String userName, boolean isSerialized) {
-        String userNameFile = "../NewBank/newbank/server/DatabaseFiles/" + userName.toLowerCase() + ".obj";
-
-        // Try to find the name of existing customer
-        try{
-            FileInputStream fis = new FileInputStream(userNameFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Customer customer = (Customer) ois.readObject();
-            ois.close(); 
-            return customer;
-        } catch (IOException ioe) {
-            System.out.println(ioe);
-            return null;
-        } catch (ClassNotFoundException cnf){
-            System.out.println(cnf);
-            return null;
-        }
-
-    }
-
-    public void addCustomer(Customer customer, boolean isSerialized){
-        // add the customer into the database
-        // Try to serialise the data
-		try {
-			FileOutputStream fos = new FileOutputStream("../NewBank/newbank/server/DatabaseFiles/" 
-													+ customer.getUsername().toLowerCase() + ".obj");
-			ObjectOutputStream oos  = new ObjectOutputStream(fos);
-    		oos.writeObject(customer);
-    		oos.flush();
-    		oos.close();
-		} catch(IOException ioe) {
-			System.out.println("Error: " + ioe.toString());
-		}
-    }
 }
 
     

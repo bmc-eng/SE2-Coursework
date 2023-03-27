@@ -8,10 +8,29 @@ public class Account implements Serializable {
 	private double Balance;
 	private String Type;
 
-	public Account(String accountName, double openingBalance, String Type) {
+	public Account(String accountName, double openingBalance, String type) {
 		this.accountName = accountName;
 		this.Balance = openingBalance;
-		this.Type = Type;
+		this.Type = type;
+	}
+
+	public double getBalance(){
+		return Balance;
+	}
+
+	// Mutator method to move money out (debit) of the account
+	public boolean addMoney(double transferAmount){
+		if (transferAmount > 0){
+			Balance += transferAmount;
+			return true;
+		}
+		return false;
+		
+	}
+	// Mutator method to move money into (credit) of the account
+	public boolean transferAmount(double transferAmount){
+		Balance -= transferAmount;
+		return true;
 	}
 	
 	public String toString() {
@@ -20,20 +39,6 @@ public class Account implements Serializable {
 
 	public String getType(){
 		return this.Type;
-	}
-
-	public Double getBalance(){
-		return this.Balance;
-	}
-
-	// Mutator method to move money out (debit) of the account
-	public void Debit(double debitAmount){
-		this.Balance -= debitAmount;
-	}
-
-	// Mutator method to move money into (credit) of the account
-	public void Credit(double creditAmount){
-		this.Balance += creditAmount;
 	}
 
 }
