@@ -7,6 +7,7 @@ public class NewBank {
 	private static final NewBank bank = new NewBank();
 	private HashMap<String,Customer> customers;
 	private Database db = new Database();
+	private double savingsRate = 0.05;
 	
 	private NewBank() {
 		customers = new HashMap<>();
@@ -132,6 +133,22 @@ public class NewBank {
 		db.addCustomer(customer, true);
 		// Need to re-serialise the object to save changes
 		return "Current account added";
+		
+	}
+
+	public String addSavingsAccount(Customer customer){
+		// Check if customer has an existing current account
+		for(Account a: customer.getAccounts()){
+			if (a.getType().contentEquals("Savings")){
+				return "Savings account already exists!";
+			}
+		}
+		SavingsAccount account = new SavingsAccount(customer.getFirstName()+"Savings", 0, "Savings", savingsRate);
+
+		customer.addAccount(account);
+		db.addCustomer(customer, true);
+		// Need to re-serialise the object to save changes
+		return "Savings account added";
 		
 	}
 
