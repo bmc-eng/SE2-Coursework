@@ -56,7 +56,7 @@ public class NewBankClientHandler extends Thread{
 			String userName = in.readLine();
 			
 			// Check if the username is in the database
-			Customer customer = db.getCustomer(userName);
+			Customer customer = db.getCustomer(userName, true);
 			if (customer == null){
 				out.println("Username does not exist...");
 				welcomeMenu();
