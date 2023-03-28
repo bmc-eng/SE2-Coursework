@@ -76,13 +76,19 @@ public class NewBankClientHandler extends Thread{
 			// if the user is authenticated then get requests from the user and process them 
 			if(customerID != null) {
 				out.println("Log In Successful. What do you want to do?");
-				while(true) {
+				boolean isOngoingSession = true;
+				while(isOngoingSession) {
 					String request = in.readLine();
 					System.out.println("Request from " + customerID.getKey());
 					// Refresh customer details:
 					customer = db.getCustomer(userName, true);
 					// Changed to customer object
 					String responce = bank.processRequest(customer, request);
+					
+					// gracefully exit the process
+					if (responce == "LOGGING OFF..."){
+						isOngoingSession = false;
+					}
 					out.println(responce);
 				}
 			}

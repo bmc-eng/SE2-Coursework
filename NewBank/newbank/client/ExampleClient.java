@@ -34,7 +34,7 @@ public class ExampleClient extends Thread{
 						String response = bankServerIn.readLine();
 						// Code to prevent a null error if the user isn't logged in
 						
-						if (response == null){
+						if (response == null || response == "exit"){
 							// Terminate the loop - need to use System.exit in order to 
 							// kill all open threads for the client.
 							System.exit(0);

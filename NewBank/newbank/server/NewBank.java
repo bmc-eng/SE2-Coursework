@@ -13,14 +13,14 @@ public class NewBank {
 		customers = new HashMap<>();
 		db = new Database();
 		
-		// NOT NEEDED
-		/* 
+		// Needed for resetting the objects when changing the class file
+		
 		try {
 			addTestData();
 		} catch (IOException ioe){
 			System.out.println("Error");
 		}
-		*/
+		
 		
 	}
 	
@@ -46,6 +46,7 @@ public class NewBank {
 				case "NEWCURRENT" : return addCurrentAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
+				case "EXIT" : return "LOGGING OFF...";
 				
 				
 				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
