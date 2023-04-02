@@ -21,6 +21,70 @@ public class NewBankClientHandler extends Thread{
 		db = new Database();
 	}
 
+	// Method to handle the login of a user
+	private void setupServer(){
+		
+		try{
+			// get the initial setup string from the client
+			String initialSetup = in.readLine();
+			// TODO: create account details
+
+			out.println("Checking Details...");
+			System.out.println(initialSetup);
+			// assume login request - split out into username and password
+			String[] details = initialSetup.split("\t");
+			String userName = details[0];
+			String password = details[1];
+
+			// Check that the user exists
+			Customer customer = db.getCustomer(userName, true);
+			if (customer == null){
+				out.println("Username does not exist...");
+				return;
+			}
+
+			
+			if(!customer.getPassword().contentEquals(password)){
+				out.println("Password invalid");
+				return;
+			}
+
+			// authenticate user and get customer ID token from bank for use in subsequent requests
+			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
+			// if the user is authenticated then get requests from the user and process them 
+			if(customerID != null) {
+				out.println("Log In Successful. What do you want to do?");
+				boolean isOngoingSession = true;
+				while(isOngoingSession) {
+					String request = in.readLine();
+					System.out.println("Request from " + customerID.getKey());
+					// Refresh customer details:
+					customer = db.getCustomer(userName, true);
+					// Changed to customer object
+					String responce = bank.processRequest(customer, request);
+					
+					// gracefully exit the process
+					if (responce == "LOGGING OFF..."){
+						isOngoingSession = false;
+					}
+					out.println(responce);
+				}
+			}
+			else {
+				out.println("Log In Failed");
+			}
+
+
+
+		} catch (IOException ioe){
+			ioe.printStackTrace();
+
+		}
+		
+
+	}
+
+	/* 
 	public void welcomeMenu(){
 		// 
 		out.println("Welcome to NewBank!");
@@ -48,6 +112,7 @@ public class NewBankClientHandler extends Thread{
 		// Recursively remain on this menu until either 1 or 2 is selected
 		welcomeMenu();
 	}
+	
 	
 	public void login(){
 		
@@ -101,6 +166,7 @@ public class NewBankClientHandler extends Thread{
 		}
 		
 	}
+	*/
 
 	public void createAccount() throws IOException{
 		try{
@@ -135,9 +201,10 @@ public class NewBankClientHandler extends Thread{
 		}
 	}
 
+	// Method run each time that requests come from the client
 	public void run() {
 		// keep getting requests from the client and processing them
-			welcomeMenu();
+			setupServer();
 			// ask for user name
 			
 			try {
