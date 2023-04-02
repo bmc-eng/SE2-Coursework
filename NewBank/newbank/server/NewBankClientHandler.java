@@ -13,7 +13,8 @@ public class NewBankClientHandler extends Thread{
 	private PrintWriter out;
 	private Database db;
 	
-	
+	// *******************************
+	// ******** CONSTRUCTOR **********
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -25,7 +26,10 @@ public class NewBankClientHandler extends Thread{
 	private void setupServer(){
 		
 		try{
-			// get the initial setup string from the client
+			// Client will send an initial command to either login or create a new user
+			// Process this initial command first
+
+			// Read from the string sent by client
 			String initialSetup = in.readLine();
 			out.println("Checking Details...");
 
@@ -34,7 +38,7 @@ public class NewBankClientHandler extends Thread{
 			String userName = details[1];
 			String password = details[2];
 
-			// Check if this is a new user or existing login
+			// Check if this is a new user creation or existing login
 			Customer customer;
 			if (details[0].equals("LOGIN")){
 				// login the user
@@ -125,7 +129,6 @@ public class NewBankClientHandler extends Thread{
 	public void run() {
 		// keep getting requests from the client and processing them
 			setupServer();
-			// ask for user name
 			
 			try {
 				in.close();
