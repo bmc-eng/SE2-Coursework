@@ -30,10 +30,15 @@ public class NewBank {
 	
 	// Added code for serialised users 
 	public synchronized CustomerID checkLogInDetails(String userName, String password, Customer customer) {
-		if (customer.getUsername().contains(userName) && customer.getPassword().contains(password)){
-			return new CustomerID(userName);
+		try{
+			if (customer.getUsername().contains(userName) && customer.getPassword().contains(password)){
+				return new CustomerID(userName);
+			}
+			return null;
+		} catch (NullPointerException npe){
+			return null;
 		}
-		return null;
+		
 	}
 
 	// commands from the NewBank customer are processed in this method. 
@@ -41,6 +46,7 @@ public class NewBank {
 		// Split the request up into different strings - this will enable multiple commands on one line
 		String[] requests = request.split(" ");
 		try{
+			// This lists all of the possible actions of the bank
 			switch(requests[0]) {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
@@ -50,7 +56,7 @@ public class NewBank {
 				
 				
 				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
-		}
+			}
 		}
 		catch( Exception e){
 			return e.getMessage(); // Return error message for resolving errors in development phase

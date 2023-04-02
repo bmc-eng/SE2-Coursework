@@ -45,8 +45,6 @@ public class NewBankClientHandler extends Thread{
 				customer = null;
 			}
 
-
-
 			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
 			
 			// if the user is authenticated then get requests from the user and process them 
@@ -101,94 +99,10 @@ public class NewBankClientHandler extends Thread{
 		
 	}
 
-	/* 
-	public void welcomeMenu(){
-		// 
-		out.println("Welcome to NewBank!");
-		out.println("1. Login");
-		out.println("2. Create account");
-		out.println("3. Exit");
-		out.println("Enter option (number)");
-		try{
-			String response = in.readLine();
-			if (response.contains("1")){
-				login();
-			}
-			if (response.contains("2")){
-				createAccount();
-			}
-			if (response.contains("3")){
-				// exit the thread
-				return;
-			}
-		}
-		catch(IOException e){
-			e.printStackTrace();
-			
-		}
-		// Recursively remain on this menu until either 1 or 2 is selected
-		welcomeMenu();
-	}
-	
-	
-	public void login(){
-		
-		try{
-			out.println("Enter Username");
-			String userName = in.readLine();
-			
-			// Check if the username is in the database
-			Customer customer = db.getCustomer(userName, true);
-			if (customer == null){
-				out.println("Username does not exist...");
-				welcomeMenu();
-			}
-			// ask for password - use Console to mask the password from screen
-			out.println("Enter Password");
-			String password = in.readLine();
-
-			out.println("Checking Details...");
-			if(!customer.getPassword().contentEquals(password)){
-				out.println("Password invalid");
-				welcomeMenu();
-			}
-			
-			// authenticate user and get customer ID token from bank for use in subsequent requests
-			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
-			// if the user is authenticated then get requests from the user and process them 
-			if(customerID != null) {
-				out.println("Log In Successful. What do you want to do?");
-				boolean isOngoingSession = true;
-				while(isOngoingSession) {
-					String request = in.readLine();
-					System.out.println("Request from " + customerID.getKey());
-					// Refresh customer details:
-					customer = db.getCustomer(userName, true);
-					// Changed to customer object
-					String responce = bank.processRequest(customer, request);
-					
-					// gracefully exit the process
-					if (responce == "LOGGING OFF..."){
-						isOngoingSession = false;
-					}
-					out.println(responce);
-				}
-			}
-			else {
-				out.println("Log In Failed");
-			}
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-		
-	}
-	*/
 
 	// Method to create a new customer account
 	private Customer createAccount(String userName, String password, String[] details){
 		
-			
 		//Check if the username already exists
 		if (db.getCustomer(userName, true) != null){
 			out.println("Username: " + userName + " already exists. Please chose another login name!");

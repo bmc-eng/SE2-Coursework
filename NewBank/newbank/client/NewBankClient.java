@@ -33,8 +33,7 @@ public class NewBankClient extends Thread{
 			loginDetails.put("userName", userName);
 			loginDetails.put("password", password);
 
-			//var jObj = new JSONObject(loginDetails);
-
+			// TODO: Convert to JSON format for sending better object model to sever
 
 			return "LOGIN" + "\t" + userName + "\t" + password;
 		} catch (IOException ioe){
@@ -109,8 +108,6 @@ public class NewBankClient extends Thread{
 		bankServerResponceThread = new Thread() {
 			 
 			public void run() {
-				// Ask for login details of the user
-				//bankServerOut.println(initialDetails);
 				
 				try {
 					while(true) {
@@ -122,7 +119,6 @@ public class NewBankClient extends Thread{
 							// kill all open threads for the client.
 							System.exit(0);
 						} else {
-
 							System.out.println(response);
 						}
 						
@@ -132,7 +128,6 @@ public class NewBankClient extends Thread{
 					return;
 				}
 				
-
 			}
 		};
 		bankServerResponceThread.start();
@@ -167,7 +162,7 @@ public class NewBankClient extends Thread{
 		System.out.println("3. Exit");
 		System.out.println("Enter option (number)");
 
-		// 
+		// Get the input from the user
 		try{
 			String response = userInput.readLine();
 			if (response.contains("1")){
