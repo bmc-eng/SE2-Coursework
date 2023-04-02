@@ -47,7 +47,7 @@ public class NewBank {
 		String[] requests = request.split(" ");
 		try{
 			// This lists all of the possible actions of the bank
-			switch(requests[0]) {
+			switch(requests[0].toUpperCase()) {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
 				case "INFO" : return showFullDetails(customer);
