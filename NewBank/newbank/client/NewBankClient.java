@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.io.Console;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 
 public class NewBankClient extends Thread{
@@ -188,7 +192,27 @@ public class NewBankClient extends Thread{
 	private String passwordInput(){
 		Console console = System.console();
 		char[] passwordArray = console.readPassword();
-		return new String (passwordArray);
+
+		// Hash the password
+		try{
+			String unsecurePassword = new String(passwordArray);
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
+			byte[] hashedBytes = md.digest(unsecurePassword.getBytes(StandardCharsets.UTF_8));
+			StringBuffer sb = new StringBuffer();
+			for (byte b : hashedBytes) {
+    			sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+			}
+			//System.out.println(sb.toString());
+			return sb.toString();
+			//System.out.println(new String(hashedBytes, StandardCharsets.US_ASCII));
+			//return new String(hashedBytes, StandardCharsets.US_ASCII);
+		
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {

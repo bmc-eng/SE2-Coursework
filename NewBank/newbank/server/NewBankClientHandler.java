@@ -15,6 +15,7 @@ public class NewBankClientHandler extends Thread{
 	
 	// *******************************
 	// ******** CONSTRUCTOR **********
+	// *******************************
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -53,9 +54,11 @@ public class NewBankClientHandler extends Thread{
 			
 			// if the user is authenticated then get requests from the user and process them 
 			if(customerID != null) {
-				out.println("Log In Successful. What do you want to do?");
+				out.println("Log In Successful.");
 				boolean isOngoingSession = true;
 				while(isOngoingSession) {
+					// Prompt user for actions they want to perform.
+					out.println("What do you want to do?");
 					String request = in.readLine();
 					System.out.println("Request from " + customerID.getKey());
 					// Refresh customer details:
@@ -68,6 +71,8 @@ public class NewBankClientHandler extends Thread{
 						isOngoingSession = false;
 					}
 					out.println(responce);
+
+					
 				}
 			}
 			else {

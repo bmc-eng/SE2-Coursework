@@ -180,7 +180,8 @@ public class NewBank {
 		john.addAccount(new Account("checking", 250.0, "current"));
 		customers.put("John", john);
 
-		Customer test = new Customer("test", "test123", "T.", 
+		// Test password: test123
+		Customer test = new Customer("test", "daef4953b9783365cad6615223720506cc46c5167cd16ab500fa597aa08ff964eb24fb19687f34d7665f778fcb6c5358fc0a5b81e1662cf90f73a2671c53f991", "T.", 
 							"Est", "London", "test@test.com");
 		test.addAccount(new Account("Current",1000.0, "current"));
 
