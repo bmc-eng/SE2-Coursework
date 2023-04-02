@@ -36,7 +36,7 @@ public class NewBankClient extends Thread{
 			//var jObj = new JSONObject(loginDetails);
 
 
-			return userName + "\t" + password;
+			return "LOGIN" + "\t" + userName + "\t" + password;
 		} catch (IOException ioe){
 			return "Error";
 		}
@@ -80,7 +80,10 @@ public class NewBankClient extends Thread{
 			System.out.println("phone number: ");
 			String phone = userInput.readLine();
 			
-			return userName + "\t" + password + "\t" + firstName + "\t" + lastName + "\t" + email + "\t" + address + "\t" + phone; 
+			return "CREATE" + "\t" + userName + "\t" + 
+					password + "\t" + firstName + "\t" + 
+					lastName + "\t" + email + "\t" + 
+					address + "\t" + phone; 
 		}
 		catch(IOException e){
 			System.out.println("Account creation failed; please try again");

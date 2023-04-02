@@ -15,7 +15,7 @@ public class Database {
     public File csv;
     public FileReader csvReader;
 
-    private static final String dbLocation = "NewBank/newbank/server/DatabaseFiles/";
+    private static final String dbLocation = "newbank/server/DatabaseFiles/";
 
     // Constructor method     
     public Database(){

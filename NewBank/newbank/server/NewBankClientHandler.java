@@ -21,36 +21,34 @@ public class NewBankClientHandler extends Thread{
 		db = new Database();
 	}
 
-	// Method to handle the login of a user
+	// Method to set up and start the session on behalf of a user
 	private void setupServer(){
 		
 		try{
 			// get the initial setup string from the client
 			String initialSetup = in.readLine();
-			// TODO: create account details
-
 			out.println("Checking Details...");
+
 			System.out.println(initialSetup);
-			// assume login request - split out into username and password
 			String[] details = initialSetup.split("\t");
-			String userName = details[0];
-			String password = details[1];
+			String userName = details[1];
+			String password = details[2];
 
-			// Check that the user exists
-			Customer customer = db.getCustomer(userName, true);
-			if (customer == null){
-				out.println("Username does not exist...");
-				return;
+			// Check if this is a new user or existing login
+			Customer customer;
+			if (details[0].equals("LOGIN")){
+				// login the user
+				customer = loginUser(userName, password, details);
+			} else if (details[0].equals("CREATE")){
+				customer = createAccount(userName, password, details);
+			} else {
+				customer = null;
 			}
 
-			
-			if(!customer.getPassword().contentEquals(password)){
-				out.println("Password invalid");
-				return;
-			}
 
-			// authenticate user and get customer ID token from bank for use in subsequent requests
+
 			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
+			
 			// if the user is authenticated then get requests from the user and process them 
 			if(customerID != null) {
 				out.println("Log In Successful. What do you want to do?");
@@ -82,6 +80,25 @@ public class NewBankClientHandler extends Thread{
 		}
 		
 
+	}
+
+	// Method to log in a user and return the customer
+	private Customer loginUser(String userName, String password, String[] details){
+		
+		// Check that the user exists
+		Customer customer = db.getCustomer(userName, true);
+		if (customer == null){
+			out.println("Username does not exist...");
+			return null;
+		}
+
+		if(!customer.getPassword().contentEquals(password)){
+			out.println("Password invalid");
+			return null;
+		}
+
+		return customer;
+		
 	}
 
 	/* 
@@ -168,37 +185,26 @@ public class NewBankClientHandler extends Thread{
 	}
 	*/
 
-	public void createAccount() throws IOException{
-		try{
-			out.println("Username: ");
-			String userName = in.readLine();
-
-			// TODO: Check if the username already exists
-
-			out.println("Password: ");
-			String password = in.readLine();
-			// TO DO: Encrypt password before writing to database
-			out.println("First Name: ");
-			String firstName = in.readLine();
-			out.println("Last Name: ");
-			String lastName = in.readLine();
-			out.println("email: ");
-			String email = in.readLine();
-			out.println("address: ");
-			String address = in.readLine(); //TODO we should probably make addresses their own class so that they can be printed neatly
-			out.println("phone number: ");
-			String phone = in.readLine();
-			Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
-			// Write the customer data to the database - using serialisation
-			db.addCustomer(newCustomer, true);
+	// Method to create a new customer account
+	private Customer createAccount(String userName, String password, String[] details){
+		
+			
+		//Check if the username already exists
+		if (db.getCustomer(userName, true) != null){
+			out.println("Username: " + userName + " already exists. Please chose another login name!");
+			return null;
 		}
-		catch(IOException e){
-			System.out.println("Account creation failed; please try again");
-			createAccount();
-		}
-		finally{
-			System.out.println("Creation Successful");
-		}
+		
+		String firstName = details[3];
+		String lastName = details[4];
+		String email = details[5];
+		String address = details[6]; //TODO we should probably make addresses their own class so that they can be printed neatly
+		//String phone = details[7];
+		Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
+		// Write the customer data to the database - using serialisation
+		db.addCustomer(newCustomer, true);
+		return newCustomer;
+		
 	}
 
 	// Method run each time that requests come from the client
