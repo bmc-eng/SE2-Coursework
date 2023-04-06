@@ -13,7 +13,9 @@ public class NewBankClientHandler extends Thread{
 	private PrintWriter out;
 	private Database db;
 	
-	
+	// *******************************
+	// ******** CONSTRUCTOR **********
+	// *******************************
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -21,111 +23,117 @@ public class NewBankClientHandler extends Thread{
 		db = new Database();
 	}
 
-	public void welcomeMenu(){
-		// 
-		out.println("Welcome to NewBank!");
-		out.println("1. Login");
-		out.println("2. Create account");
-		out.println("3. Exit");
-		out.println("Enter option (number)");
-		try{
-			String response = in.readLine();
-			if (response.contains("1")){
-				login();
-			}
-			if (response.contains("2")){
-				createAccount();
-			}
-			if (response.contains("3")){
-				// exit the thread
-				return;
-			}
-		}
-		catch(IOException e){
-			e.printStackTrace();
-			
-		}
-		// Recursively remain on this menu until either 1 or 2 is selected
-		welcomeMenu();
-	}
-	
-	public void login(){
+	// Method to set up and start the session on behalf of a user
+	private void setupServer(){
 		
 		try{
-			out.println("Enter Username");
-			String userName = in.readLine();
-			// Check if the username is in the database
-			Customer customer = db.getCustomer(userName, true);
-			if (customer == null){
-				out.println("Username does not exist...");
-				welcomeMenu();
-			}
-			// ask for password - use Console to mask the password from screen
-			out.println("Enter Password");
-			String password = in.readLine();
+			// Client will send an initial command to either login or create a new user
+			// Process this initial command first
 
+			// Read from the string sent by client
+			String initialSetup = in.readLine();
 			out.println("Checking Details...");
-			if(!customer.getPassword().contentEquals(password)){
-				out.println("Password invalid");
-				welcomeMenu();
+
+			System.out.println(initialSetup);
+			String[] details = initialSetup.split("\t");
+			String userName = details[1];
+			String password = details[2];
+
+			// Check if this is a new user creation or existing login
+			Customer customer;
+			if (details[0].equals("LOGIN")){
+				// login the user
+				customer = loginUser(userName, password, details);
+			} else if (details[0].equals("CREATE")){
+				customer = createAccount(userName, password, details);
+			} else {
+				customer = null;
 			}
-			
-			// authenticate user and get customer ID token from bank for use in subsequent requests
+
 			CustomerID customerID = bank.checkLogInDetails(userName, password, customer);
+			
 			// if the user is authenticated then get requests from the user and process them 
 			if(customerID != null) {
-				out.println("Log In Successful. What do you want to do?");
-				while(true) {
+				out.println("Log In Successful.");
+				boolean isOngoingSession = true;
+				while(isOngoingSession) {
+					// Prompt user for actions they want to perform.
+					out.println("What do you want to do?");
 					String request = in.readLine();
 					System.out.println("Request from " + customerID.getKey());
-					String responce = bank.processRequest(customerID, request);
+					// Refresh customer details:
+					customer = db.getCustomer(userName, true);
+					// Changed to customer object
+					String responce = bank.processRequest(customer, request);
+					
+					// gracefully exit the process
+					if (responce == "LOGGING OFF..."){
+						isOngoingSession = false;
+					}
 					out.println(responce);
+
+					
 				}
 			}
 			else {
 				out.println("Log In Failed");
 			}
+
+
+
+		} catch (IOException ioe){
+			ioe.printStackTrace();
+
 		}
-		catch(IOException e){
-			e.printStackTrace();
+		
+
+	}
+
+	// Method to log in a user and return the customer
+	private Customer loginUser(String userName, String password, String[] details){
+		
+		// Check that the user exists
+		Customer customer = db.getCustomer(userName, true);
+		if (customer == null){
+			out.println("Username does not exist...");
+			return null;
 		}
+
+		if(!customer.getPassword().contentEquals(password)){
+			out.println("Password invalid");
+			return null;
+		}
+
+		return customer;
 		
 	}
 
-	public void createAccount() throws IOException{
-		try{
-			out.println("Username: ");
-			String userName = in.readLine();
-			out.println("Password: ");
-			String password = in.readLine();
-			// TO DO: Encrypt password before writing to database
-			out.println("First Name: ");
-			String firstName = in.readLine();
-			out.println("Last Name: ");
-			String lastName = in.readLine();
-			out.println("email: ");
-			String email = in.readLine();
-			out.println("address: ");
-			String address = in.readLine(); //TODO we should probably make addresses their own class so that they can be printed neatly
-			out.println("phone number: ");
-			String phone = in.readLine();
-			Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
-			// Write the customer data to the database - using serialisation
-			db.addCustomer(newCustomer, true);
+
+	// Method to create a new customer account
+	private Customer createAccount(String userName, String password, String[] details){
+		
+		//Check if the username already exists
+		if (db.getCustomer(userName, true) != null){
+			out.println("Username: " + userName + " already exists. Please chose another login name!");
+			return null;
 		}
-		catch(IOException e){
-			System.out.println("Account creation failed; please try again");
-			createAccount();
-		}
-		finally{
-			System.out.println("Creation Successful");
-		}
+		
+		String firstName = details[3];
+		String lastName = details[4];
+		String email = details[5];
+		String address = details[6]; //TODO we should probably make addresses their own class so that they can be printed neatly
+		//String phone = details[7];
+		Customer newCustomer = new Customer(userName, password, firstName, lastName, address, email);
+		// Write the customer data to the database - using serialisation
+		db.addCustomer(newCustomer, true);
+		return newCustomer;
+		
 	}
 
+	// Method run each time that requests come from the client
 	public void run() {
 		// keep getting requests from the client and processing them
-			welcomeMenu();
-			// ask for user name
+			setupServer();
 			
 			try {
 				in.close();

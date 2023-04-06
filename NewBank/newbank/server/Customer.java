@@ -14,12 +14,14 @@ public class Customer implements Serializable {
 	private String userName;
 	private String password;
 	
+	/* 
 	public Customer(String email, String address, String phone) {
 		accounts = new ArrayList<>();
 		customerEmailAddress = email; 
 		customerAddress = address; 
 		customerPhoneNumber = phone; 
 	}
+	*/
 
 	// Adding a specific constructor method for populating from Database
 	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
@@ -31,18 +33,41 @@ public class Customer implements Serializable {
 		this.customerEmailAddress = email;
 		// To do: add info on accounts
 		accounts = new ArrayList<>();
+		
 	}
 
-	public Customer(){
+	 
+	public Customer(String userName, String password){
+		this.userName = userName;
+		this.password = password;
 		accounts = new ArrayList<>();
 	}
+	
 	
 	public String accountsToString() {
 		String s = "";
 		for(Account a : accounts) {
-			s += a.toString();
+			s += a.toString() + "\n";
 		}
 		return s;
+	}
+
+	public double getCurrentBalance(){
+		Account a = getCurrentAccount();
+		if (a != null){
+			return a.getBalance();
+		} else {
+			return 0.0;
+		}
+	}
+
+	public Account getCurrentAccount(){
+		for (Account a: accounts) {
+			if (a.getType().toLowerCase().contains("current")){
+				return a;
+			}
+		}
+		return null;
 	}
 
 	public ArrayList<Account> getAccounts(){
@@ -94,8 +119,25 @@ public class Customer implements Serializable {
 	}
 
 	public void printInfo(){
+		System.out.println("Username: " + userName);
+		System.out.println("Full Name: " + firstName + " " + lastName);
 		System.out.println("Address: " + customerAddress);
 		System.out.println("Phone Number: " + customerPhoneNumber);
 		System.out.println("Email: " + customerEmailAddress);
+		System.out.println();
+		System.out.println("ACCOUNT DETAILS: ");
+
+
+	}
+
+	// Return information to the customer client
+	public String getCustomerInformation(){
+		String customerInfo = "Username: " + userName + "\n" +
+								"Full Name: " + firstName + " " + lastName + "\n" +
+								"Address: " + customerAddress + "\n" +
+								"Phone Number: " + customerPhoneNumber + "\n" +
+								"Email: " + customerEmailAddress + "\n\n" +
+								"ACCOUNT DETAILS: \n" + accountsToString();
+		return customerInfo;  
 	}
 }
