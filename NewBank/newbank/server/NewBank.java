@@ -50,6 +50,7 @@ public class NewBank {
 			switch(requests[0].toUpperCase()) {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
+				case "NEWSAVINGS" : return addSavingsAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
