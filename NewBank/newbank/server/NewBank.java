@@ -55,7 +55,7 @@ public class NewBank {
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
-				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
+				default : return "\nUnable to process. Your options are: \n\nSHOWMYACCOUNTS\nNEWCURRENT\nINFO\nTRANSFER x TO user\nEXIT\n";
 			}
 		}
 		catch( Exception e){
