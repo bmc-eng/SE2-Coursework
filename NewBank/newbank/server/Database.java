@@ -15,10 +15,26 @@ public class Database {
     public File csv;
     public FileReader csvReader;
 
-    private static final String dbLocation = "newbank/server/DatabaseFiles/";
+    private static final String projectName = "NewBank";
+    private static final String projectDirectory = "newbank/server/DatabaseFiles/";
+    private String dbLocation;
 
     // Constructor method     
     public Database(){
+        File currentDirFile = new File(".");
+        
+        try{
+            String userDirectory = currentDirFile.getCanonicalPath();
+            if (userDirectory.contains(projectName)){
+                dbLocation = userDirectory + "/" + projectDirectory;
+            } else {
+                dbLocation = userDirectory +"/" + projectName + "/" + projectDirectory;
+            }
+            //System.out.println(helper);
+        } catch (IOException ioe){
+            System.out.println("Database error setting default location: newbank/server/DatabaseFiles/");
+            dbLocation = projectDirectory;
+        }
         
     }
     
@@ -53,7 +69,7 @@ public class Database {
     		oos.flush();
     		oos.close();
 		} catch(IOException ioe) {
-			System.out.println("Error: " + ioe.toString());
+			System.out.println("Error addCustomer: " + ioe.toString());
 		}
     }
 
@@ -68,7 +84,7 @@ public class Database {
     		oos.close();
             return true;
 		} catch(IOException ioe) {
-			System.out.println("Error: " + ioe.toString());
+			System.out.println("Error updateCustomer: " + ioe.toString());
             return false;
 		}
     }
