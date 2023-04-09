@@ -13,7 +13,7 @@ public class Customer implements Serializable {
 	private String lastName;
 	private String userName;
 	private String password;
-	
+
 	/* 
 	public Customer(String email, String address, String phone) {
 		accounts = new ArrayList<>();
@@ -139,5 +139,15 @@ public class Customer implements Serializable {
 								"Email: " + customerEmailAddress + "\n\n" +
 								"ACCOUNT DETAILS: \n" + accountsToString();
 		return customerInfo;  
+	}
+
+	// Update whether a savings account exists for this customer
+	public boolean hasSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return true;
+			}
+		}
+		return false;
 	}
 }

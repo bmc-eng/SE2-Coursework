@@ -1,14 +1,16 @@
 package newbank.server;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
 public class Routines extends TimerTask{
-
+    final private static String dir = "newbank/server/DatabaseFiles/";
+    
     // This method returns all files in a given directory
     public Set<String> getFiles(String dir){
-        Set<String> results = new Set<String>();
+        Set<String> results = new HashSet<String>();
         File[] files = new File(dir).listFiles();
         for (File file : files) {
             // Select only .obj files
@@ -19,8 +21,9 @@ public class Routines extends TimerTask{
         return results;
     }
 
+    // Run through all savings accounts and add interest calculations
     public void updateSavingsInterest(){
-        // Run through all savings accounts and add interest calculations
+        Set<String> files = getFiles(null)
 
     }
 
