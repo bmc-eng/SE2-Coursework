@@ -53,7 +53,7 @@ public class NewBank {
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
-				case "SHOWSTATEMENT" : return showStatementForAccount(customer, requests);
+				case "VIEWSTATEMENT" : return viewStatementForAccount(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
@@ -66,7 +66,7 @@ public class NewBank {
 		}
 	}
 
-	private String showStatementForAccount(Customer customer, String[] instructions){
+	private String viewStatementForAccount(Customer customer, String[] instructions){
 		// get the statement for a specific account
 		String accountName = instructions[2];
 		String accountStatement = customer.getStatements(accountName);
