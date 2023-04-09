@@ -53,6 +53,7 @@ public class NewBank {
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
+				case "SHOWSTATEMENT" : return showStatementForAccount(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
@@ -62,6 +63,17 @@ public class NewBank {
 		catch( Exception e){
 			return e.getMessage(); // Return error message for resolving errors in development phase
 			//return "FAIL";
+		}
+	}
+
+	private String showStatementForAccount(Customer customer, String[] instructions){
+		// get the statement for a specific account
+		String accountName = instructions[2];
+		String accountStatement = customer.getStatements(accountName);
+		if (accountStatement != null){
+			return accountStatement;
+		} else {
+			return "Unable to retrieve account statements for: " + accountName;
 		}
 	}
 

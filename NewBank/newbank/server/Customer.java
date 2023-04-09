@@ -14,14 +14,6 @@ public class Customer implements Serializable {
 	private String userName;
 	private String password;
 	
-	/* 
-	public Customer(String email, String address, String phone) {
-		accounts = new ArrayList<>();
-		customerEmailAddress = email; 
-		customerAddress = address; 
-		customerPhoneNumber = phone; 
-	}
-	*/
 
 	// Adding a specific constructor method for populating from Database
 	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
@@ -139,5 +131,15 @@ public class Customer implements Serializable {
 								"Email: " + customerEmailAddress + "\n\n" +
 								"ACCOUNT DETAILS: \n" + accountsToString();
 		return customerInfo;  
+	}
+
+	// Return a String of the statements from a particular account
+	public String getStatements(String accountName){
+		for (Account selectedAccount : accounts){
+			if (selectedAccount.getName().contains(accountName)){
+				return selectedAccount.getAccountStatements();
+			}
+		}
+		return null;
 	}
 }
