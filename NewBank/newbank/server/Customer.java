@@ -150,4 +150,22 @@ public class Customer implements Serializable {
 		}
 		return false;
 	}
+
+	public SavingsAccount getSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return (SavingsAccount) account;
+			}
+		}
+		return null;
+	}
+
+	public void updateSavings(SavingsAccount savings){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				int location = accounts.indexOf(account);
+				accounts.set(location, savings);
+			}
+		}	
+	}
 }
