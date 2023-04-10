@@ -53,6 +53,7 @@ public class NewBank {
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
+				case "EDITPROFILE" : return editProfile(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
@@ -63,6 +64,35 @@ public class NewBank {
 			return e.getMessage(); // Return error message for resolving errors in development phase
 			//return "FAIL";
 		}
+	}
+
+	// Method to update a customer's details
+	private String editProfile(Customer customer, String[] instructions){
+		// Deconstruct the request
+		String attributeToChange;
+		String newAttribute;
+		try{
+			attributeToChange = instructions[1];
+		}
+		catch(Exception e){
+			return "Valid attributes are: email, address, phone";
+		}
+		try{
+			newAttribute = instructions[2];
+		}
+		catch(Exception e){
+			return "Missing new value to change to";
+		}
+		if(attributeToChange.contentEquals("email")){
+			customer.changeEmail(newAttribute);
+		}
+		if(attributeToChange.contentEquals("address")){
+			customer.changeAddress(newAttribute);
+		}
+		if(attributeToChange.contentEquals("phone")){
+			customer.changePhoneNumber(newAttribute);
+		}
+		return "OK, profile updated.";
 	}
 
 	// Method to transfer money from one account to another
