@@ -110,6 +110,10 @@ public class Customer implements Serializable {
 		customerPhoneNumber = newPhone; 
 	}
 
+	public void changePassword(String password){
+		this.password = password;
+	}
+
 	public void printInfo(){
 		System.out.println("Username: " + userName);
 		System.out.println("Full Name: " + firstName + " " + lastName);
@@ -142,4 +146,35 @@ public class Customer implements Serializable {
 		}
 		return null;
 	}
+
+	public void updateSavings(SavingsAccount savings){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				int location = accounts.indexOf(account);
+				accounts.set(location, savings);
+			}
+		}	
+	}
+
+
+	// Update whether a savings account exists for this customer
+	public boolean hasSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public SavingsAccount getSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return (SavingsAccount) account;
+			}
+		}
+		return null;
+	}
+
+	
 }

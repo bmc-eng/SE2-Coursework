@@ -54,6 +54,8 @@ public class NewBank {
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
 				case "VIEWSTATEMENT" : return viewStatementForAccount(customer, requests);
+				case "EDITPROFILE" : return editProfile(customer, requests);
+				case "RESETPASSWORD" : return resetPassword(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
@@ -75,6 +77,66 @@ public class NewBank {
 		} else {
 			return "Unable to retrieve account statements for: " + accountName;
 		}
+	}
+
+	// Method to reset a customer's password
+	private String resetPassword(Customer customer, String[] instructions){
+		// Correct format is the new password, separated by a space and the password retyped
+		String password;
+		String retypedPassword;
+		try{
+			password = instructions[1];
+		}
+		catch(Exception e){
+			return "Incorrect format; write new password twice separated by a space";
+		}
+		try{
+			retypedPassword = instructions[2];
+		}
+		catch(Exception e){
+			return "Incorrect format; write new password twice separated by a space";
+		}
+		// Check if password is the same
+		if(password.contentEquals(retypedPassword)){
+			customer.changePassword(retypedPassword);
+			db.updateCustomer(customer);
+			return "OK, password reset";
+		}
+		else{
+			return "Passwords do not match";
+		}
+	}
+
+	// Method to update a customer's details
+	private String editProfile(Customer customer, String[] instructions){
+		// Deconstruct the request
+		String attributeToChange;
+		String newAttribute;
+		// First parameter is the attribute to be changed
+		try{
+			attributeToChange = instructions[1];
+		}
+		catch(Exception e){
+			return "Valid attributes are: email, address, phone";
+		}
+		// Second parameter is the new value it should be changed to
+		try{
+			newAttribute = instructions[2];
+		}
+		catch(Exception e){
+			return "Missing new value to change to";
+		}
+		if(attributeToChange.contentEquals("email")){
+			customer.changeEmail(newAttribute);
+		}
+		if(attributeToChange.contentEquals("address")){
+			customer.changeAddress(newAttribute);
+		}
+		if(attributeToChange.contentEquals("phone")){
+			customer.changePhoneNumber(newAttribute);
+		}
+		db.updateCustomer(customer);
+		return "OK, profile updated.";
 	}
 
 	// Method to transfer money from one account to another
