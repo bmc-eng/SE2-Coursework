@@ -14,7 +14,6 @@ public class NewBank {
 		db = new Database();
 		
 		// Needed for resetting the objects when changing the class file
-		
 		try {
 			addTestData();
 		} catch (IOException ioe){
@@ -53,10 +52,14 @@ public class NewBank {
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
+				case "VIEWSTATEMENT" : return viewStatementForAccount(customer, requests);
+				case "EDITPROFILE" : return editProfile(customer, requests);
+				case "RESETPASSWORD" : return resetPassword(customer, requests);
 				case "EXIT" : return "LOGGING OFF...";
 				
 				
-				default : return "UNABLE TO PROCESS. Your options are \nSHOWMYACCOUNTS\nNEWCURRENT\nINFO";
+				default : return "UNABLE TO PROCESS. Your options are: \n\n" +
+							"SHOWMYACCOUNTS\nNEWCURRENT\nNEWSAVINGS\nINFO\nTRANSFER\nVIEWSTATEMENT\nEDITPROFILE\nRESETPASSWORD\nEXIT";
 			}
 		}
 		catch( Exception e){
@@ -65,8 +68,80 @@ public class NewBank {
 		}
 	}
 
+	// Method to view the statement logs for a given account. Shows all transactions
+	private String viewStatementForAccount(Customer customer, String[] instructions){
+		// get the statement for a specific account
+		String accountName = instructions[2];
+		String accountStatement = customer.getStatements(accountName);
+		if (accountStatement != null){
+			return accountStatement;
+		} else {
+			return "Unable to retrieve account statements for: " + accountName;
+		}
+	}
+
+	// Method to reset a customer's password
+	private String resetPassword(Customer customer, String[] instructions){
+		// Correct format is the new password, separated by a space and the password retyped
+		String password;
+		String retypedPassword;
+		try{
+			password = instructions[1];
+		}
+		catch(Exception e){
+			return "Incorrect format; write new password twice separated by a space";
+		}
+		try{
+			retypedPassword = instructions[2];
+		}
+		catch(Exception e){
+			return "Incorrect format; write new password twice separated by a space";
+		}
+		// Check if password is the same
+		if(password.contentEquals(retypedPassword)){
+			customer.changePassword(retypedPassword);
+			db.updateCustomer(customer);
+			return "OK, password reset";
+		}
+		else{
+			return "Passwords do not match";
+		}
+	}
+
+	// Method to update a customer's details
+	private String editProfile(Customer customer, String[] instructions){
+		// Deconstruct the request
+		String attributeToChange;
+		String newAttribute;
+		// First parameter is the attribute to be changed
+		try{
+			attributeToChange = instructions[1];
+		}
+		catch(Exception e){
+			return "Valid attributes are: email, address, phone";
+		}
+		// Second parameter is the new value it should be changed to
+		try{
+			newAttribute = instructions[2];
+		}
+		catch(Exception e){
+			return "Missing new value to change to";
+		}
+		if(attributeToChange.contentEquals("email")){
+			customer.changeEmail(newAttribute);
+		}
+		if(attributeToChange.contentEquals("address")){
+			customer.changeAddress(newAttribute);
+		}
+		if(attributeToChange.contentEquals("phone")){
+			customer.changePhoneNumber(newAttribute);
+		}
+		db.updateCustomer(customer);
+		return "OK, profile updated.";
+	}
+
 	// Method to transfer money from one account to another
-	// Only support checking to checking accounts - TRANSFER 100.0 john
+	// Only support checking to checking accounts - TRANSFER 100.0 TO john
 	private String transferToUser(Customer customer, String[] instructions) {
 		// Deconstruct the request
 		double amountToTransfer;

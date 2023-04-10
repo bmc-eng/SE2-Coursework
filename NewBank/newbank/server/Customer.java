@@ -14,14 +14,6 @@ public class Customer implements Serializable {
 	private String userName;
 	private String password;
 	
-	/* 
-	public Customer(String email, String address, String phone) {
-		accounts = new ArrayList<>();
-		customerEmailAddress = email; 
-		customerAddress = address; 
-		customerPhoneNumber = phone; 
-	}
-	*/
 
 	// Adding a specific constructor method for populating from Database
 	public Customer(String userName, String password, String firstName, String lastName, String address, String email){
@@ -118,6 +110,10 @@ public class Customer implements Serializable {
 		customerPhoneNumber = newPhone; 
 	}
 
+	public void changePassword(String password){
+		this.password = password;
+	}
+
 	public void printInfo(){
 		System.out.println("Username: " + userName);
 		System.out.println("Full Name: " + firstName + " " + lastName);
@@ -140,4 +136,45 @@ public class Customer implements Serializable {
 								"ACCOUNT DETAILS: \n" + accountsToString();
 		return customerInfo;  
 	}
+
+	// Return a String of the statements from a particular account
+	public String getStatements(String accountName){
+		for (Account selectedAccount : accounts){
+			if (selectedAccount.getName().contains(accountName)){
+				return selectedAccount.getAccountStatements();
+			}
+		}
+		return null;
+	}
+
+	public void updateSavings(SavingsAccount savings){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				int location = accounts.indexOf(account);
+				accounts.set(location, savings);
+			}
+		}	
+	}
+
+
+	// Update whether a savings account exists for this customer
+	public boolean hasSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public SavingsAccount getSavings(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Savings")){
+				return (SavingsAccount) account;
+			}
+		}
+		return null;
+	}
+
+	
 }
