@@ -9,6 +9,9 @@ import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.Console;
 
+// *********************************** THIS IS A LEGACY FILE ***********************************
+// *********************************************************************************************
+
 public class ExampleClient extends Thread{
 	
 	private Socket server;

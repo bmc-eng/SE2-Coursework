@@ -2,15 +2,36 @@
 
 A New Bank is an API based banking app that runs in the command line. Supported operations:
 
-SHOWALLACCOUNTS
-NEWCURRENT
-NEWSAVINGS
-INFO
-TRANSFER 100.0 TO userName
-VIEWSTATEMENT
-EDITPROFILE
-RESETPASSWORD
-EXIT
+- SHOWALLACCOUNTS
+- NEWCURRENT
+- NEWSAVINGS
+- INFO
+- TRANSFER 100.0 TO userName
+- VIEWSTATEMENT
+- EDITPROFILE
+- RESETPASSWORD
+- EXIT
+
+## Features
+
+### Client
+
+- **User menu** provided to the user to login, create an account or gracefully exit the bank. Login details are collected and sent to the server to validate.
+- **Password masking** to hide the password during input to ensure that evesdroppers cannot see the password being entered. This works similar to UNIX password entry with no characters showing.
+- **Hashing of passwords** so that only hashed values and not plaintext are sent to the server.
+
+### Server
+
+- **Databasing of users through object serialisation** to allow persistence of account details as the bank restarts. Consider adding a cloud database system in later iterations
+- **SHOWALLACCOUNTS** returns a list of all of the accounts a user has under their name
+- **NEWCURRENT** creates a new current account for the user.
+- **NEWSAVINGS** creates a new savings account for the user.
+- **INFO** displays all of the users details, such as username, name, email and account info and balances.
+- **TRANSFER** allows the tranfer between current accounts between people. Usage is TRANSFER double TO user
+- **VIEWSTATEMENT** displays the logs for a particular account, showing all transfers in and out. 
+- **EDITPROFILE** allows the user to change their email, phone and address in their profile. Usage is EDITPROFILE email address phone
+- **RESETPASSWORD** allows the user to reset their password. Usage is RESETPASSWORD newpassword newpassword
+- **EXIT** allows the user to gracefully exit the bank, ending the server thread and the client.
 
 
 ## Sprint Rotation
