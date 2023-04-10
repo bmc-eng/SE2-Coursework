@@ -95,6 +95,13 @@ This will execute the client that will connect to the local host of the running 
 
 To stop all processes, use CTRL+C in the Terminal window running the server process.
 
+## Login details
+
+Test login details are:
+
+Username: test
+Password: test123
+
 ## Roadmap: Tasks for this weeks sprint
 
 - Documentation and commenting of code
