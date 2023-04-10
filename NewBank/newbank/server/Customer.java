@@ -118,6 +118,10 @@ public class Customer implements Serializable {
 		customerPhoneNumber = newPhone; 
 	}
 
+	public void changePassword(String password){
+		this.password = password;
+	}
+
 	public void printInfo(){
 		System.out.println("Username: " + userName);
 		System.out.println("Full Name: " + firstName + " " + lastName);
