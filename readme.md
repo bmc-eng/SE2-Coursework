@@ -4,8 +4,13 @@ A New Bank is an API based banking app that runs in the command line. Supported 
 
 SHOWALLACCOUNTS
 NEWCURRENT
+NEWSAVINGS
 INFO
 TRANSFER 100.0 TO userName
+VIEWSTATEMENT
+EDITPROFILE
+RESETPASSWORD
+EXIT
 
 
 ## Sprint Rotation
@@ -76,6 +81,7 @@ To stop all processes, use CTRL+C in the Terminal window running the server proc
 - Running of test code for adding a new customer
 
 ## Latest updates
+
 
 Added .gitignore to the project to remove class files
 

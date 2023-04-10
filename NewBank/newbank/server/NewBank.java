@@ -14,7 +14,6 @@ public class NewBank {
 		db = new Database();
 		
 		// Needed for resetting the objects when changing the class file
-		
 		try {
 			addTestData();
 		} catch (IOException ioe){
@@ -69,6 +68,7 @@ public class NewBank {
 		}
 	}
 
+	// Method to view the statement logs for a given account. Shows all transactions
 	private String viewStatementForAccount(Customer customer, String[] instructions){
 		// get the statement for a specific account
 		String accountName = instructions[2];
@@ -141,7 +141,7 @@ public class NewBank {
 	}
 
 	// Method to transfer money from one account to another
-	// Only support checking to checking accounts - TRANSFER 100.0 john
+	// Only support checking to checking accounts - TRANSFER 100.0 TO john
 	private String transferToUser(Customer customer, String[] instructions) {
 		// Deconstruct the request
 		double amountToTransfer;
