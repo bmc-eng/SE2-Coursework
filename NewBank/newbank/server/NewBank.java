@@ -51,6 +51,7 @@ public class NewBank {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
+				case "NEWLOAN" : return addLoan(customer);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
 				case "VIEWSTATEMENT" : return viewStatementForAccount(customer, requests);
@@ -227,12 +228,25 @@ public class NewBank {
 			}
 		}
 		SavingsAccount account = new SavingsAccount(customer.getFirstName()+"Savings", 0, "Savings", savingsRate);
-
 		customer.addAccount(account);
 		db.addCustomer(customer, true);
 		// Need to re-serialise the object to save changes
 		return "Savings account added";
 		
+	}
+
+	public String addLoan(Customer customer){
+		// Check if customer has an existing Loan
+		for(Account a: customer.getAccounts()){
+			if (a.getType().contentEquals("Loan")){
+				return "Sorry, You Cannot Have 2 Loans";
+			}
+		}
+		Loan loan = new Loan(amount, term:);
+		customer.addLoan(loan);
+		db.addCustomer(customer, true);
+		// Need to re-serialise the object to save changes
+		return "Loan Approved!";	
 	}
 
 	public void addNewCustomer(Customer newCustomer, String key){

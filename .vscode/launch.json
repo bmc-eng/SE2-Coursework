@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "NewBankClient",
+            "request": "launch",
+            "mainClass": "newbank.client.NewBankClient",
+            "projectName": "NewBank"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
