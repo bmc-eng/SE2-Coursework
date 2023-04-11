@@ -31,6 +31,7 @@ A New Bank is an API based banking app that runs in the command line. Supported 
 - **VIEWSTATEMENT** displays the logs for a particular account, showing all transfers in and out. 
 - **EDITPROFILE** allows the user to change their email, phone and address in their profile. Usage is EDITPROFILE email address phone
 - **RESETPASSWORD** allows the user to reset their password. Usage is RESETPASSWORD newpassword newpassword
+- **NEWLOAN** allows user to take out a loan. Usage is NEWLOAN amount termLength
 - **EXIT** allows the user to gracefully exit the bank, ending the server thread and the client.
 
 
@@ -51,7 +52,7 @@ Contributions are always welcome!
 
 To clone the main branch of the project run the following code:
 
-``` git clone https://github.com/LOdweebles/SE2-Coursework.git ```
+``` git clone https://github.com/bmc-eng/SE2-Coursework.git ```
 
 Each week, the ScrumMaster should create a new branch of the main project for the weeks sprint. To do this run the following command:
 
