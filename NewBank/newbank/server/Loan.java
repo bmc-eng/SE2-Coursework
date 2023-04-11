@@ -5,16 +5,16 @@ import java.util.ArrayList;
 
 public class Loan implements Serializable{
     private ArrayList<String> LoanRecord;
-    private double rate = 0.1;
-    private double initialAmount;
+    private static double rate = 0.1;
+    private static double initialAmount;
     private double currentBalance;
-    private double term;
-    private double paymentsMade = 0;
+    private static double term;
+    private static double paymentsMade = 0;
     private double interestAccumulated = 0;
     private String type;
 
     public Loan(String customer,double initialAmount, double term, String type){
-        this.term = term;
+        Loan.term = term;
         LoanRecord = new ArrayList<String>();
         LoanRecord.add(getTimeForLog() + "Loan Accepted For the Ammount: " + initialAmount);
     }
@@ -43,7 +43,7 @@ public class Loan implements Serializable{
     }
 
     public double getInitialAmount(){
-        return this.initialAmount;
+        return Loan.initialAmount;
     }
 
     public double getInterestAccumulated(){
@@ -51,7 +51,7 @@ public class Loan implements Serializable{
     }
 
     public double getInterestrate(){
-        return this.rate;
+        return Loan.rate;
     }
 
     private String getTimeForLog(){

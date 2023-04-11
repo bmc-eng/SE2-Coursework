@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
+
 public class Routines extends TimerTask{
     final private static String dir = "newbank/server/DatabaseFiles/";
     private static Database db = new Database();
@@ -39,24 +40,25 @@ public class Routines extends TimerTask{
     }
 
     // Create a similar method for calculating all loan balances
-    public double updateloanbalances(){
+    public double updateloanbalances(Customer loanCustomer){
         Set<String> files = getFiles();
         for(String file: files){
            Customer customer =  db.getCustomer(file, true);
             //If the customer has a loan then update balance else move on
         if(customer.hasLoan()){
-            
+            return Loan.currentBalance();
         }
-
     }
+        return 0;
 
     // Create a monthly routine to debit accounts
 
     // Create a regular routine for direct debits
-
-    public void run(){
-        // Update savings interest
-        updateSavingsInterest();
-    }
 }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'run'");
+    }
 }
