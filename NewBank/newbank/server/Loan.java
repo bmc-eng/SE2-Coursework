@@ -8,26 +8,27 @@ public class Loan implements Serializable{
     private double rate = 0.1;
     private double initialAmount;
     private double currentBalance;
-    private int term;
-    private int paymentsMade = 0;
+    private double term;
+    private double paymentsMade = 0;
     private double interestAccumulated = 0;
     private String type;
 
-    public Loan(double amount, int term, String type){
-        this.initialAmount = amount;
-        this.currentBalance = amount;
+    public Loan(String customer,double initialAmount, double term, String type){
         this.term = term;
-
         LoanRecord = new ArrayList<String>();
         LoanRecord.add(getTimeForLog() + "Loan Accepted For the Ammount: " + initialAmount);
     }
 
-    public int paymentsRemaining(){
+    public Loan(String string, int initialAmount2, String term2, Object type2) {
+    }
+
+    public double paymentsRemaining(){
         return term-paymentsMade;
     }
 
-    public double currentBalance(){
-        return this.currentBalance;
+    public static double currentBalance(){
+        double currentBalance = ((initialAmount*(1+rate)-initialAmount)/12)+initialAmount-(paymentsMade*(initialAmount*(1+rate)/term));
+        return currentBalance;
     }
 
     public void makePayment(double amount){
