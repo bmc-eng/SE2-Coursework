@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Customer implements Serializable {
 	
 	private ArrayList<Account> accounts;
+	private ArrayList<Loan> loans;
 	private String customerEmailAddress;
 	private String customerAddress;
 	private String customerPhoneNumber; 
@@ -25,6 +26,7 @@ public class Customer implements Serializable {
 		this.customerEmailAddress = email;
 		// To do: add info on accounts
 		accounts = new ArrayList<>();
+		loans = new ArrayList<>();
 		
 	}
 
@@ -68,6 +70,10 @@ public class Customer implements Serializable {
 
 	public void addAccount(Account account) {
 		accounts.add(account);		
+	}
+
+	public void addLoan(Loan loan) {
+		loans.add(loan);		
 	}
 
 	public String getUsername(){
@@ -175,6 +181,37 @@ public class Customer implements Serializable {
 		}
 		return null;
 	}
+
+
+	public boolean hasLoan(){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Loan")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Loan getLoan(){
+		for(Loan loan: loans){
+			if(loan.getType().contentEquals("Loan")){
+				return (Loan) loan;
+			}
+		}
+		return null;
+	}
+
+
+	public void updateLoan(Loan loan){
+		for(Account account: accounts){
+			if(account.getType().contentEquals("Loan")){
+				int location = accounts.indexOf(account);
+				loans.set(location, loan);
+			}
+		}	
+	}
+
+
 
 	
 }

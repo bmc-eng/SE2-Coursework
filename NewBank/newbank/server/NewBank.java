@@ -1,5 +1,6 @@
 package newbank.server;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect.Type;
 import java.util.HashMap;
 
 public class NewBank {
@@ -50,6 +51,7 @@ public class NewBank {
 				case "SHOWMYACCOUNTS": return showMyAccounts(customer);
 				case "NEWCURRENT" : return addCurrentAccount(customer);
 				case "NEWSAVINGS" : return addSavingsAccount(customer);
+				case "NEWLOAN" : return addLoan(customer, requests);
 				case "INFO" : return showFullDetails(customer);
 				case "TRANSFER" : return transferToUser(customer, requests);
 				case "VIEWSTATEMENT" : return viewStatementForAccount(customer, requests);
@@ -227,12 +229,34 @@ public class NewBank {
 			}
 		}
 		SavingsAccount account = new SavingsAccount(customer.getFirstName()+"Savings", 0, "Savings", savingsRate);
-
 		customer.addAccount(account);
 		db.addCustomer(customer, true);
 		// Need to re-serialise the object to save changes
 		return "Savings account added";
 		
+	}
+
+	public String addLoan(Customer customer, String[] request){
+		// Check if customer has an existing Loan
+		for(Account a: customer.getAccounts()){
+			if (a.getType().contentEquals("Loan")){
+				return "Sorry, You Cannot Have 2 Loans";
+			}
+		}
+		double initialAmount;
+		double term;
+		try {
+			initialAmount = Double.parseDouble(request[1]);
+			term = Double.parseDouble(request[2]);
+		} catch (NumberFormatException e){
+			return "Please enter a valid amount to transfer";
+		}
+
+		Loan loan = new Loan(customer.getFirstName()+"Loan", initialAmount , term , "Loan");
+		customer.addLoan(loan);
+		db.addCustomer(customer, true);
+		// Need to re-serialise the object to save changes
+		return "Loan Approved!";	
 	}
 
 	public void addNewCustomer(Customer newCustomer, String key){

@@ -39,6 +39,16 @@ public class Routines extends TimerTask{
     }
 
     // Create a similar method for calculating all loan balances
+    public double updateloanbalances(){
+        Set<String> files = getFiles();
+        for(String file: files){
+           Customer customer =  db.getCustomer(file, true);
+            //If the customer has a loan then update balance else move on
+        if(customer.hasLoan()){
+            
+        }
+
+    }
 
     // Create a monthly routine to debit accounts
 
@@ -48,4 +58,5 @@ public class Routines extends TimerTask{
         // Update savings interest
         updateSavingsInterest();
     }
+}
 }
